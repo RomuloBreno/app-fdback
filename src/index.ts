@@ -27,7 +27,6 @@ app.post('/publish-comment/:postId', async (req: any, res: any) => {
   }
 });
 
-
 app.post('/publish', async (req: any, res: any) => {
   try {
     var result:IPost = await service.InsertPost(req);
@@ -60,7 +59,6 @@ app.get('/comments/:id',async (req: any, res: any) => {
   let commentById = await Feedbacks.findById(req.params.id)//change to get in file service
   return res.status(200).json({ message: 'Comment by id', commentById});
 });
-
 
 app.get('/comments/:postId', async (req: any, res: any) => {
   let postsById = await Post.findById(req.params.id)//change to get in file service
