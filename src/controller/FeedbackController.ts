@@ -1,4 +1,4 @@
-import type { IFeedbacks } from "../entities/Feedbacks.ts";
+import type { IFeedback} from "../entities/Feedbacks.ts";
 import Feedbacks from "../entities/Feedbacks.ts";
 import Post from "../entities/Post.ts";
 import type {IFeedbackServices} from '../interfaces/IFeedbackServices.ts';
@@ -11,7 +11,7 @@ let servicePost: IPostServices = new PostServices();
 class FeedbackController{
     async handle(req:any, res:any){
       try {
-        var result:IFeedbacks = await service.InsertFeedback(req, res);
+        var result:IFeedback= await service.InsertFeedback(req, res);
         return res.status(201).json({ message: 'Comment created', id: result.id, owner: result.author});
     
       } catch (error) {
