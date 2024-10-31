@@ -5,6 +5,7 @@ import type { IFeedback } from "../entities/Feedbacks.ts";
 import type { IFeedbackServices } from "../interfaces/IFeedbackServices.ts";
 import FeedbackRepository from "../repository/FeedbacksRepository.ts";
 import PostRepository from "../repository/PostRepository.ts";
+import mongoose from "mongoose";
 
 let repositoryFeedBack = FeedbackRepository;
 let repositoryPost = PostRepository;
@@ -23,13 +24,17 @@ class FeedbacksService implements IFeedbackServices {
         return feedbacks
     }
     public async getById(id: string){
+      if (!mongoose.Types.ObjectId.isValid(id))
+        return false
         let result = await repositoryFeedBack.getById(id)
         return result
       }
 
-      public async getFeedbacksByPostId(id: string):Promise<IFeedback[] | undefined>{
+      public async getFeedbacksByPostId(id: string):Promise<IFeedback[] | undefined | false>{
+        if (!mongoose.Types.ObjectId.isValid(id))
+          return false
         let result = await repositoryPost.getById(id)
-        let feedbacks:IFeedback[] | undefined = result?.comments
+        let feedbacks:IFeedback[] | undefined | false = result?.comments
         return feedbacks
       }
 

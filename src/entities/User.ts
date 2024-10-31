@@ -6,6 +6,7 @@ export interface IUser extends Document {
     name: string;
     email: string;
     job: string;
+    passwordHash: string;
 }
 
 // Esquema do usuário
@@ -13,6 +14,7 @@ const UserSchema: Schema<IUser> = new Schema({
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     job: { type: String, required: true },
+    passwordHash: { type: String, required: true }
 }, { timestamps: true }); // Adiciona timestamps para createdAt e updatedAt
 
 // Modelo do usuário
