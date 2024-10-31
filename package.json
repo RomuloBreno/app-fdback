@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "main": "index.js",
   "scripts": {
-    "start": "node --watch --experimental-strip-types src/server.ts",
+    "start": "node --experimental-strip-types src/server.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

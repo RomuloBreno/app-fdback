@@ -16,7 +16,7 @@ export class BaseRepository<T extends Document> {
     }
 
     async getById(id: string): Promise<T | null> {
-        return this.model.findById(id).exec();
+        return this.model.findById(id).select('-passwordHash').exec();
     }
 
     async create(item: T): Promise<T> {
