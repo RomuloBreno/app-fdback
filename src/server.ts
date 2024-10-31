@@ -16,9 +16,7 @@ app.get('/terms',(req:any, res:any) =>{
 app.use(express.json());
 app.use('/v1', router);
 app.use('/auth', authRouter);
-app.use('/protected-route', authMiddleware, (req, res) => {
-  res.json({ message: `Acesso autorizado! ID do usuário: ${req.userId}` });
-});
+
 //init 
 app.listen(PORT, () => {
   console.log(`API rodando em http://localhost:${PORT}`);
