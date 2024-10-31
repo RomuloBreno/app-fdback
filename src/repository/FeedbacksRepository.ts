@@ -1,6 +1,7 @@
 
-import { BaseRepository } from './BaseRepository.ts';
-import Feedback,{ IFeedback } from '../entities/Feedbacks.ts';
+import { BaseRepository } from './base/BaseRepository.ts';
+import Feedback from '../entities/Feedbacks.ts';
+import type { IFeedback } from '../entities/Feedbacks.ts';
 
 // repositories/UserRepository.ts
 export class FeedbackRepository extends BaseRepository<IFeedback> {

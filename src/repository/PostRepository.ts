@@ -1,6 +1,7 @@
 
-import { BaseRepository } from './BaseRepository.ts';
-import Post, { IPost } from '../entities/Post.ts';
+import { BaseRepository } from './base/BaseRepository.ts';
+import Post from '../entities/Post.ts';
+import type { IPost } from '../entities/Post.ts';
 
 // repositories/UserRepository.ts
 export class PostRepository extends BaseRepository<IPost> {

@@ -1,6 +1,6 @@
 
 import { Document, Model } from 'mongoose';
-import {connect} from '../database/mongodb.ts';
+import {connect} from '../../database/mongodb.ts';
 
 // repositories/BaseRepository.ts
 export class BaseRepository<T extends Document> {

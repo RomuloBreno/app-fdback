@@ -1,8 +1,9 @@
 
 import { Document, Model } from 'mongoose';
 import {connect} from '../database/mongodb.ts';
-import { BaseRepository } from './BaseRepository.ts';
-import User, { IUser } from '../entities/User.ts';
+import { BaseRepository } from './base/BaseRepository.ts';
+import User from '../entities/User.ts';
+import type { IUser } from '../entities/User.ts';
 
 // repositories/UserRepository.ts
 export class UserRepository extends BaseRepository<IUser> {
