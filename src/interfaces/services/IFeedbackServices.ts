@@ -1,4 +1,4 @@
-import type { IFeedback } from "../entities/Feedbacks.ts";
+import { IFeedback } from "../../entities/Feedbacks.ts";
 
 export interface IFeedbackServices{
     InsertFeedback(req: any, res:any): Promise<IFeedback>;

@@ -2,7 +2,7 @@ import Post from "../entities/Post.ts";
 import Feedbacks from "../entities/Feedbacks.ts";
 import type { IPost } from "../entities/Post.ts";
 import type { IFeedback } from "../entities/Feedbacks.ts";
-import type { IFeedbackServices } from "../interfaces/IFeedbackServices.ts";
+import type { IFeedbackServices } from "../interfaces/services/IFeedbackServices.ts";
 import FeedbackRepository from "../repository/FeedbacksRepository.ts";
 import PostRepository from "../repository/PostRepository.ts";
 import mongoose from "mongoose";

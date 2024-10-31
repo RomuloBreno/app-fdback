@@ -1,4 +1,4 @@
-import type { IPost } from "../entities/Post.ts";
+import type { IPost } from "../../entities/Post.ts";
 
 export interface IPostServices{
     InsertPost(req: Request): Promise<IPost>;

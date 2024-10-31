@@ -1,18 +1,25 @@
 import type { IPost } from "../entities/Post.ts";
-import Post from "../entities/Post.ts";
-import type { IPostServices } from '../interfaces/IPostServices.ts';
+import type { IPostServices } from '../interfaces/services/IPostServices.ts';
+import type { ILoggerService } from '../interfaces/logger/ILoggerService.ts';
 import PostService from '../services/PostService.ts';
+import LoggerService from '../services/LoggerService.ts';
+import Logger from '../entities/logger/Logger.ts';
+
+let logger: ILoggerService = new LoggerService();
 let service: IPostServices = new PostService();
+
 
 class PostController {
   async handle(req: any, res: any) {
     try {
       var result: IPost = await service.InsertPost(req);
-      if (!result)
+      if (!result){
         return res.status(404).json({ message: 'User not created' });
+      }
       return res.status(201).json({ message: 'Post created', id: result.id, owner: result.owner });
     } catch (error) {
-      return res.status(401).json({ message: 'Invalid post data' });
+      logger.Insert(Object.assign(new Logger(), {status: "Failed", statusCode: 404, content: error.message , method: "handle PostController"}));
+      return res.status(404).json({ message: 'Invalid post data' });
     }
   }
 

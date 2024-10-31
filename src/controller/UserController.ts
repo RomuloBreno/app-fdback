@@ -1,19 +1,24 @@
-import mongoose from "mongoose";
 import type { IUser } from "../entities/User.ts";
-import User from "../entities/User.ts";
-import type { IUserServices } from '../interfaces/IUserServices.ts';
+import type { IUserServices } from '../interfaces/services/IUserServices.ts';
+import type { ILoggerService } from '../interfaces/logger/ILoggerService.ts';
 import UserService from '../services/UserService.ts';
+import LoggerService from '../services/LoggerService.ts';
+import Logger from '../entities/logger/Logger.ts';
+
+let logger: ILoggerService = new LoggerService();
 let service: IUserServices = new UserService();
 
 class UserController {
   async handle(req: any, res: any) {
     try {
       var result: IUser = await service.InsertUser(req);
-      if (!result)
+      if (!result){
         return res.status(404).json({ message: 'User not created' });
+      }
       return res.status(201).json({ message: 'User created', id: result.id });
     } catch (error) {
-      return res.status(401).json({ message: 'Invalid user data' });
+      logger.Insert(Object.assign(new Logger(), {status: "Failed", statusCode: 404, content: error.message , method: "handle UserController"}));
+      return res.status(404).json({ message: 'Invalid user data' });
     }
   }
 

@@ -1,5 +1,5 @@
 import type { IUser } from "../entities/User.ts";
-import type { IUserServices } from "../interfaces/IUserServices.ts";
+import type { IUserServices } from "../interfaces/services/IUserServices.ts";
 import User from "../entities/User.ts";
 import UserRepository from "../repository/UserRepository.ts";
 import mongoose from "mongoose";

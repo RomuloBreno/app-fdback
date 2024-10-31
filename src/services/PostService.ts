@@ -1,6 +1,6 @@
 import type { IPost } from "../entities/Post.ts";
-import type { IPostServices } from "../interfaces/IPostServices.ts";
 import Post from "../entities/Post.ts";
+import type { IPostServices } from "../interfaces/services/IPostServices.ts";
 import PostRepository from "../repository/PostRepository.ts";
 import mongoose from "mongoose";
 
