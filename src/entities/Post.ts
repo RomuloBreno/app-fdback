@@ -1,11 +1,11 @@
 // src/models/Post.ts
 import mongoose, { Document, Schema } from 'mongoose';
-import type {IFeedbacks} from './Feedbacks.ts'; // Importação correta de IComments
+import type {IFeedback} from './Feedbacks.ts'; // Importação correta de IComments
 
 export interface IPost extends Document {
     title: string;
     description: string;
-    comments?: IFeedbacks[]; // Array de comentários
+    comments?: IFeedback[]; // Array de comentários
     owner: mongoose.Schema.Types.ObjectId; // Referência ao usuário
 }
 

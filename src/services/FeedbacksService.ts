@@ -1,34 +1,35 @@
 import Post from "../entities/Post.ts";
 import Feedbacks from "../entities/Feedbacks.ts";
-import { BaseRepository } from "../repository/BaseRepository.ts";
 import type { IPost } from "../entities/Post.ts";
-import type { IFeedbacks } from "../entities/Feedbacks.ts";
+import type { IFeedback } from "../entities/Feedbacks.ts";
 import type { IFeedbackServices } from "../interfaces/IFeedbackServices.ts";
+import FeedbackRepository from "../repository/FeedbacksRepository.ts";
+import PostRepository from "../repository/PostRepository.ts";
 
-let baseRepositoryFeedBack: BaseRepository<IFeedbacks> = new BaseRepository(Feedbacks);
-let baseRepositoryPost: BaseRepository<IPost> = new BaseRepository(Post);
+let repositoryFeedBack = FeedbackRepository;
+let repositoryPost = PostRepository;
 
 class FeedbacksService implements IFeedbackServices {
-    public async InsertFeedback(req: any, res: any): Promise<IFeedbacks> {
+    public async InsertFeedback(req: any, res: any): Promise<IFeedback> {
         let postById = await Post.findById(req.params.postId)//change to get in file service
         let feedbacks = new Feedbacks(req.body);
         if (!postById)
             return res.status(401).json({ message: 'Invalid comment data' });
-        baseRepositoryFeedBack.create(feedbacks)
+        repositoryFeedBack.create(feedbacks)
 
         //put comment in array post
         postById.comments?.push(feedbacks)
-        baseRepositoryPost.update(postById.id, postById)//save comment in post
+        repositoryPost.update(postById.id, postById)//save comment in post
         return feedbacks
     }
     public async getById(id: string){
-        let result = await baseRepositoryFeedBack.getById(id)
+        let result = await repositoryFeedBack.getById(id)
         return result
       }
 
-      public async getFeedbacksByPostId(id: string):Promise<IFeedbacks[] | undefined>{
-        let result = await baseRepositoryPost.getById(id)
-        let feedbacks:IFeedbacks[] | undefined = result?.comments
+      public async getFeedbacksByPostId(id: string):Promise<IFeedback[] | undefined>{
+        let result = await repositoryPost.getById(id)
+        let feedbacks:IFeedback[] | undefined = result?.comments
         return feedbacks
       }
 

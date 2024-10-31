@@ -1,7 +1,7 @@
 
 import mongoose, { Document, Schema } from 'mongoose';
 
-export interface IFeedbacks extends Document {
+export interface IFeedback extends Document {
     content: string;
     author: mongoose.Schema.Types.ObjectId; // Referência ao autor (User)
 }
@@ -13,6 +13,6 @@ const CommentSchema: Schema = new Schema({
 });
 
 // Modelo do Post
-const Feedbacks = mongoose.model<IFeedbacks>('Comment', CommentSchema);
+const Feedback = mongoose.model<IFeedback>('Comment', CommentSchema);
 
-export default Feedbacks;
+export default Feedback;
