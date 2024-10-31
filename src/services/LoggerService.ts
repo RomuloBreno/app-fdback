@@ -1,5 +1,5 @@
 import type { ILoggerService } from "../interfaces/logger/ILoggerService.ts";
-import Logger, { ILogger } from "../entities/logger/Logger.ts";
+import type { ILogger } from "../entities/logger/Logger.ts";
 import LoggerRepository from "../repository/LoggerRepository.ts";
 import mongoose from "mongoose";
 
