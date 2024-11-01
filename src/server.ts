@@ -2,12 +2,12 @@ import express from 'express'
 import dotenv from 'dotenv'
 import {router} from './routes/routes.ts'
 import {authRouter} from './routes/authRoutes.ts'
-import { authMiddleware } from './middleware/authMiddleware.ts'
+import cors from 'cors';
 
 dotenv.config()
 const app = express();
 const PORT = process.env.PORT;
-
+app.use(cors());
 app.get('/terms',(req:any, res:any) =>{
   return res.json({
     message:"Termos de Serviço"

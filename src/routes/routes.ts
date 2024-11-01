@@ -19,6 +19,10 @@ router.get('/user/:id', authMiddleware, async (req:any, res:any) =>{
    userController.getById(req, res, req.params.id)
 });
 
+router.get('/posts', authMiddleware, async (req:any, res:any) =>{
+  postController.getAll(req, res)
+});
+
 router.get('/post/:id', authMiddleware, async (req:any, res:any) =>{
   postController.getById(req, res, req.params.id)
 });

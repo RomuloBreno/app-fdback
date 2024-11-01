@@ -4,28 +4,34 @@ import User from '../entities/User.ts';
 
 class AuthController {
   async register(req: any, res: any): Promise<Response> {
+    if (typeof req.body === 'string') {
+      return res.status(400).json({ result: 'JSON is not valid' });
+    }
     const {name, email, job, password } = req.body;
 
     try {
       await AuthService.register(name, email, job, password);
-      return res.status(201).json({ message: 'Usuário registrado com sucesso' });
+      return res.status(201).json({ result: 'Usuário registrado com sucesso' });
     } catch (error) {
       if(error.message.split(" ").includes("duplicate"))
-        return res.status(500).json({ error: 'Erro ao registrar o usuário, esse e-mail ja foi registrado' });
-      return res.status(500).json({ error: 'Erro ao registrar o usuário' });
+        return res.status(400).json({ result: 'Erro ao registrar o usuário, esse e-mail ja foi registrado' });
+      return res.status(400).json({ result: 'Erro ao registrar o usuário' });
     }
   }
 
   async login(req: any, res: any): Promise<Response> {
+    if (typeof req.body === 'string') {
+      return res.status(400).json({ result: 'Credenciais inválidas' });
+    }
     const { email, password } = req.body;
 
     const isValidUser = await AuthService.validateUser(email, password);
     if (!isValidUser) {
-      return res.status(401).json({ error: 'Credenciais inválidas' });
+      return res.status(400).json({ result: 'Credenciais inválidas' });
     }
     const user = await User.findOne({ email: email });
     if (!user) {
-      return res.status(404).json({ error: 'Usuário não encontrado' });
+      return res.status(404).json({ result: 'Usuário não encontrado' });
     }
 
     // Gera o token JWT com o ID do usuário

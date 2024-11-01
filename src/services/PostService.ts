@@ -17,6 +17,10 @@ class PostService implements IPostServices {
         let result = await repository.getById(id)
         return result
     }
+    public async getAll() : Promise<IPost[]>{
+        let result = await repository.getAll()
+        return result
+    }
 }
 
 export default PostService;

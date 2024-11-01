@@ -27,7 +27,13 @@ class PostController {
     var result: IPost = await service.getById(id);
     if (!result)
       return res.status(404).json({ message: 'Not find' });
-    return res.status(200).json({ message: 'User by id', result });
+    return res.status(200).json({ message: 'Post by id', result });
+  }
+  public async getAll(req: any, res: any) {
+    var result: IPost[] = await service.getAll();
+    if (!result)
+      return res.status(404).json({ message: 'Not find' });
+    return res.status(200).json({ message: 'Posts by User', result });
   }
 }
 export default PostController
