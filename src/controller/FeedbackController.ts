@@ -13,27 +13,27 @@ class FeedbackController{
       try {
         var result:IFeedback= await service.InsertFeedback(req, res);
         if(!result){
-          return res.status(404).json({ message: 'Comment not created'});
+          return res.status(404).json({status:false, result:  'Comment not created'});
         }
-        return res.status(201).json({ message: 'Comment created', id: result.id, owner: result.author});
+        return res.status(201).json({status:true, result:  'Comment created', id: result.id, owner: result.author});
     
       } catch (error) {
         logger.Insert(Object.assign(new Logger(), {status: "Failed", statusCode: 404, content: error.message , method: "handle FeedbackController"}));
-        return res.status(404).json({message: 'Invalid comment data'});
+        return res.status(404).json({result: 'Invalid comment data'});
       }
     }
 
     public async getById(req:any, res:any, id:string){
       let feedbackById = await service.getById(id)//change to get in file service
       if(!feedbackById)
-        return res.status(404).json({message:'Not find'});
+        return res.status(404).json({result:'Not find'});
       return res.status(200).json({feedbackById});
     }
 
     public async getFeedbacksByPostId(req:any, res:any, id:string){
       let feedbacksByPostId = await service.getFeedbacksByPostId(id)
       if(!feedbacksByPostId)
-        return res.status(404).json({ message: 'Not find Comments'});
+        return res.status(404).json({status:false, result:  'Not find Comments'});
       return res.status(200).json({feedbacksByPostId});
     }
 

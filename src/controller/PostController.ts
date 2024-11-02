@@ -14,26 +14,26 @@ class PostController {
     try {
       var result: IPost = await service.InsertPost(req);
       if (!result){
-        return res.status(404).json({ message: 'User not created' });
+        return res.status(404).json({status:false, result:  'User not created' });
       }
-      return res.status(201).json({ message: 'Post created', id: result.id, owner: result.owner });
+      return res.status(201).json({status:true, result:  'Post created', id: result.id, owner: result.owner });
     } catch (error) {
       logger.Insert(Object.assign(new Logger(), {status: "Failed", statusCode: 404, content: error.message , method: "handle PostController"}));
-      return res.status(404).json({ message: 'Invalid post data' });
+      return res.status(404).json({status:false, result:  'Invalid post data' });
     }
   }
 
   public async getById(req: any, res: any, id: string) {
-    var result: IPost = await service.getById(id);
-    if (!result)
-      return res.status(404).json({ message: 'Not find' });
-    return res.status(200).json({ message: 'Post by id', result });
+    var resultPost: IPost = await service.getById(id);
+    if (!resultPost)
+      return res.status(404).json({status:false, result:  'Not find' });
+    return res.status(200).json({status:true, result:  'Post by id', resultPost });
   }
   public async getAll(req: any, res: any) {
-    var result: IPost[] = await service.getAll();
-    if (!result)
-      return res.status(404).json({ message: 'Not find' });
-    return res.status(200).json({ message: 'Posts by User', result });
+    var resultPost: IPost[] = await service.getAll();
+    if (!resultPost)
+      return res.status(404).json({status:false, result:  'Not find' });
+    return res.status(200).json({status:true, result:  'Posts by User', resultPost });
   }
 }
 export default PostController

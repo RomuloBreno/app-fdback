@@ -13,19 +13,19 @@ class UserController {
     try {
       var result: IUser = await service.InsertUser(req);
       if (!result){
-        return res.status(404).json({ message: 'User not created' });
+        return res.status(404).json({status:false, result:  'User not created' });
       }
-      return res.status(201).json({ message: 'User created', id: result.id });
+      return res.status(201).json({status:true, result:  'User created', id: result.id });
     } catch (error) {
       logger.Insert(Object.assign(new Logger(), {status: "Failed", statusCode: 404, content: error.message , method: "handle UserController"}));
-      return res.status(404).json({ message: 'Invalid user data' });
+      return res.status(404).json({status:false, result:  'Invalid user data' });
     }
   }
 
   public async getById(req: any, res: any, id: string) {
     var result: IUser = await service.getById(id);
     if (!result)
-      return res.status(404).json({ message: 'Not find' });
+      return res.status(404).json({status:false, result:  'Not find' });
     return res.status(200).json({ result });
   }
 }
