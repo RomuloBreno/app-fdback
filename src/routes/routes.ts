@@ -11,28 +11,27 @@ let postController = new PostController()
 let feedbackController = new FeedbackController()
 
 //POST
-router.post('/publish-feedback/:postId', rateLimiter, authMiddleware, feedbackController.handle);
+router.post('/publish-feedback/:postId', authMiddleware, feedbackController.handle);
 
-router.post('/publish', rateLimiter, authMiddleware, postController.handle);
+router.post('/publish', authMiddleware, postController.handle);
 
 //GET
-router.get('/user/:id', rateLimiter, authMiddleware, async (req:any, res:any) =>{
+router.get('/user/:id', authMiddleware, async (req:any, res:any) =>{
    userController.getById(req, res, req.params.id)
 });
 
-router.get('/posts', rateLimiter, authMiddleware, async (req:any, res:any) =>{
+router.get('/posts', authMiddleware, async (req:any, res:any) =>{
   postController.getAll(req, res)
 });
-
-router.get('/post/:id', rateLimiter, authMiddleware, async (req:any, res:any) =>{
+router.get('/post/:id', authMiddleware, async (req:any, res:any) =>{
   postController.getById(req, res, req.params.id)
 });
 
-router.get('/feedback/:id', rateLimiter, authMiddleware, async (req:any, res:any) =>{
+router.get('/feedback/:id', authMiddleware, async (req:any, res:any) =>{
   feedbackController.getById(req, res, req.params.id)
 });
 
-router.get('/feedbacks/:postId',rateLimiter, authMiddleware, async (req:any, res:any) =>{
+router.get('/feedbacks/:postId', authMiddleware, async (req:any, res:any) =>{
   feedbackController.getFeedbacksByPostId(req, res, req.params.id)
 });
 

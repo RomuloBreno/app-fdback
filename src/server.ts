@@ -13,6 +13,9 @@ app.get('/terms',(req:any, res:any) =>{
     message:"Termos de Serviço"
   })
 })
+app.get('/health',(req:any, res:any) =>{
+  return res.status(200).json({status:true})
+})
 app.use(express.json());
 app.use('/v1', router);
 app.use('/auth', authRouter);

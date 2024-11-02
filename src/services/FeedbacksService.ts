@@ -16,7 +16,7 @@ class FeedbacksService implements IFeedbackServices {
         let feedbacks = new Feedbacks(req.body);
         if (!postById)
             return res.status(401).json({status:false, result: 'Invalid comment data' });
-        repositoryFeedBack.create(feedbacks)
+        //repositoryFeedBack.create(feedbacks)
 
         //put comment in array post
         postById.comments?.push(feedbacks)

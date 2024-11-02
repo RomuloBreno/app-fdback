@@ -7,5 +7,10 @@ export const generateToken = async (userId: number): Promise<string> => {
 };
 
 export const verifyToken = (token: string): any => {
-  return jwt.verify(token, process.env.JWT_SECRET as string);
+  try{
+    return jwt.verify(token, process.env.JWT_SECRET as string);
+  }catch(error){
+    return false
+  }
+
 };
