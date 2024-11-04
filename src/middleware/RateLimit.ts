@@ -12,6 +12,6 @@ export const loginRateLimiter = rateLimit({
   },
 });
 
-export const rateLimiter = (req: Request, res: Response, next: Function) => {
+export const rateLimiter = (req: any, res: any, next: any) => {
   loginRateLimiter(req, res, next);
 };
