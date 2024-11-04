@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import AuthController from '../controller/AuthController.ts';
-import { authMiddleware } from '../middleware/authMiddleware.ts';
+import { authMiddleware } from '../middleware/AuthMiddleware.ts'
 import { rateLimiter } from '../middleware/RateLimit.ts';
 import { verifyToken } from '../utils/tokenUtil.ts';
 
