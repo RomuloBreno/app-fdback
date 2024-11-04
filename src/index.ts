@@ -2,7 +2,6 @@ import express from 'express'
 import dotenv from 'dotenv'
 import {router} from './routes/routes.ts'
 import {authRouter} from './routes/authRoutes.ts'
-import {morgan} from 'morgan'
 import cors from 'cors';
 
 dotenv.config()
@@ -13,7 +12,6 @@ app.set('trust proxy', true);
 app.use(express.json());
 app.use('/v1', router);
 app.use('/auth', authRouter);
-app.use(morgan('combined')); 
 app.get('/terms',(req:any, res:any) =>{
   return res.json({
     message:"Termos de Serviço"
