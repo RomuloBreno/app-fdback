@@ -54,6 +54,7 @@ class AuthController {
     const token = await generateToken(user.id);
     return res.status(200).json({status:true, result:token });
   }
+
   async decrypt(req: any, res: any): Promise<Response> {
     const token = req.headers.authorization?.split(' ')[1];
     const decoded = verifyToken(token);
@@ -64,7 +65,6 @@ class AuthController {
     return res.status(200).json({status:true, result:decoded});
   }
 }
-
   
 function isBase64(str:string) {
   if (typeof str !== 'string') {
