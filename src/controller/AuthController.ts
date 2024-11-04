@@ -7,10 +7,10 @@ class AuthController {
     if (typeof req.body === 'string') {
       return res.status(400).json({status:false, result:  'JSON is not valid' });
     }
-    const {name, email, job, password } = req.body;
+    const {name, nick, email, job, password } = req.body;
 
     try {
-      await AuthService.register(name, email, job, password);
+      await AuthService.register(name, nick, email, job, password);
       return res.status(201).json({status:true, result:  'Usuário registrado com sucesso' });
     } catch (error) {
       if(error.message.split(" ").includes("duplicate"))

@@ -10,6 +10,10 @@ export class UserRepository extends BaseRepository<IUser> {
     constructor() {
         super(User); // Passa o modelo UserModel para o BaseRepository
     }
+
+    async getByNick(nick: string): Promise<IUser | null> {
+        return User.findOne((x: { nick: string; })=>x.nick === nick).select('-passwordHash').exec();
+    }
 }
 
 export default new UserRepository();

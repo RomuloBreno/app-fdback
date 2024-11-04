@@ -8,6 +8,6 @@ const authRouter = Router();
 
 authRouter.post('/register', rateLimiter, AuthController.register);
 authRouter.post('/l-fdback', rateLimiter,  AuthController.login);
-authRouter.use('/t-fdback', rateLimiter, AuthController.decrypt);
+authRouter.get('/t-fdback', AuthController.decrypt);
 
 export {authRouter};

@@ -15,9 +15,14 @@ router.post('/publish-feedback/:postId', authMiddleware, feedbackController.hand
 
 router.post('/publish', authMiddleware, postController.handle);
 
+router.post('/update/user', authMiddleware, userController.update);
+
 //GET
 router.get('/user/:id', authMiddleware, async (req:any, res:any) =>{
    userController.getById(req, res, req.params.id)
+});
+router.get('/user/nick/:nick', authMiddleware, async (req:any, res:any) =>{
+   userController.getByNick(req, res, req.params.nick)
 });
 
 router.get('/posts', authMiddleware, async (req:any, res:any) =>{
@@ -29,6 +34,10 @@ router.get('/post/:id', authMiddleware, async (req:any, res:any) =>{
 
 router.get('/feedback/:id', authMiddleware, async (req:any, res:any) =>{
   feedbackController.getById(req, res, req.params.id)
+});
+
+router.get('/feedbacks/:postId', authMiddleware, async (req:any, res:any) =>{
+  feedbackController.getFeedbacksByPostId(req, res, req.params.id)
 });
 
 router.get('/feedbacks/:postId', authMiddleware, async (req:any, res:any) =>{

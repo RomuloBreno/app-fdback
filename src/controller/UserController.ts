@@ -26,7 +26,20 @@ class UserController {
     var result: IUser = await service.getById(id);
     if (!result)
       return res.status(404).json({status:false, result:  'Not find' });
-    return res.status(200).json({ result });
+    return res.status(200).json({status:true, result });
+  }
+  public async getByNick(req: any, res: any, nick: string) {
+    var result: IUser = await service.getByNick(nick);
+    if (!result)
+      return res.status(404).json({status:false, result:  'Not find' });
+    return res.status(200).json({status:true, result });
+  }
+
+  public async update(req: any, res: any, id: string) {
+    var result: IUser = await service.update(id, req);
+    if (!result)
+      return res.status(404).json({status:false, result:  'Not find' });
+    return res.status(200).json({status:true, result });
   }
 }
 export default UserController

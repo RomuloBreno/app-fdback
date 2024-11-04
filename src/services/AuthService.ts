@@ -4,10 +4,10 @@ import UserRepository from "../repository/UserRepository.ts";
 
 let repository = UserRepository
 class AuthService {
-  async register(name: string, email:string, job:string, password: string): Promise<void> {
+  async register(name: string, nick:string, email:string, job:string, password: string): Promise<void> {
     const saltRounds = parseInt(process.env.BCRYPT_SALT_ROUNDS || '10');
     const passwordHash = await bcrypt.hash(password, saltRounds);
-    let user = new User({name, email, job, passwordHash});
+    let user = new User({name, nick, email, job, passwordHash});
     await repository.create(user);
   }
 

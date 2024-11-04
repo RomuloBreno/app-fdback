@@ -17,6 +17,17 @@ class UserService implements IUserServices {
     let result = await repository.getById(id)
     return result
   }
+  public async getByNick(nick: string) {
+    if (!mongoose.Types.ObjectId.isValid(nick))
+      return false
+    let result = await repository.getByNick(nick)
+    return result
+  }
+  public async update(id: string, req:any) {
+    let user: IUser = new User(req.body);
+    let result = await repository.update(id, user)
+    return result
+  }
 }
 
 export default UserService;
