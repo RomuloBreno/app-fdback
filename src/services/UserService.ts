@@ -18,8 +18,6 @@ class UserService implements IUserServices {
     return result
   }
   public async getByNick(nick: string) {
-    if (!mongoose.Types.ObjectId.isValid(nick))
-      return false
     let result = await repository.getByNick(nick)
     return result
   }
