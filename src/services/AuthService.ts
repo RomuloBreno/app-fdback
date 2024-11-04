@@ -2,7 +2,6 @@ import bcrypt from 'bcrypt';
 import User from '../entities/User.ts';
 import UserRepository from "../repository/UserRepository.ts";
 import dotenv from "dotenv";
-import {crypto} from 'crypto-js'
 
 dotenv.config()
 
@@ -15,19 +14,11 @@ class AuthService {
     await repository.create(user);
   }
 
-
-  async verifyPassword(inputPassword: string, originalSalt: string) {
-    const hashToCompare = crypto.createHmac('sha256', originalSalt)
-                                 .update(inputPassword)
-                                 .digest('hex');
-    return hashToCompare; // Retorna true se os hashes coincidem
-}
-
   async validateUser(email: string, password: string): Promise<boolean> {
     const user = await User.findOne({email});
     if (!user) return false;
-    let pass = await this.verifyPassword(password,'16');
-    return bcrypt.compare(pass, user.passwordHash);
+    
+    return bcrypt.compare(password, user.passwordHash);
   }
 }
 
