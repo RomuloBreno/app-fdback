@@ -2,7 +2,8 @@ import {Router} from 'express'
 import UserController from "../controller/UserController.ts"
 import PostController from "../controller/PostController.ts"
 import FeedbackController from "../controller/FeedbackController.ts"
-import { authMiddleware } from '../middleware/authMiddleware.ts'
+import { authMiddleware } from '../middleware/AuthMiddleware.ts'
+
 // import { rateLimiter } from '../middleware/RateLimit.ts';
 const router = Router()
 
@@ -16,7 +17,7 @@ router.post('/publish-feedback/:postId', authMiddleware, feedbackController.hand
 router.post('/publish', authMiddleware, postController.handle);
 
 router.post('/update/user', authMiddleware, userController.update);
-  
+
 //GET
 router.get('/user/:id', authMiddleware, async (req:any, res:any) =>{
    userController.getById(req, res, req.params.id)
