@@ -1,2 +1,2 @@
-web: node --experimental-strip-types src/server.ts
+web: node --experimental-strip-types src/index.ts
 
