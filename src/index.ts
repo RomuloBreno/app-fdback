@@ -7,7 +7,12 @@ import cors from 'cors';
 dotenv.config()
 const app = express();
 const PORT = process.env?.PORT || 5000;
-app.use(cors());
+const corsOptions = {
+  origin: process.env?.FRONT_END,
+  optionsSuccessStatus: 200,
+};
+
+app.use(cors(corsOptions));
 app.set('trust proxy', 1);
 app.use(express.json());
 app.use('/v1', router);
