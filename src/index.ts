@@ -8,7 +8,7 @@ dotenv.config()
 const app = express();
 const PORT = process.env?.PORT || 3000;
 app.use(cors());
-app.set('trust proxy', true);
+app.set('trust proxy', 1);
 app.use(express.json());
 app.use('/v1', router);
 app.use('/auth', authRouter);
