@@ -1,4 +1,8 @@
 import mongoose from "mongoose";
+import dotenv from "dotenv";
+
+dotenv.config()
+
 export async function connect() {
     let mongoUri = process.env.MONGO_URI
 if (!mongoUri) {
