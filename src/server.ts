@@ -21,6 +21,6 @@ app.use('/v1', router);
 app.use('/auth', authRouter);
 
 //init 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`API rodando na porta: ${PORT}`);
 });
