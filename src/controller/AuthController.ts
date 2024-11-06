@@ -59,7 +59,7 @@ class AuthController {
     const token = req.headers.authorization?.split(' ')[1];
     const decoded = verifyToken(token);
     if (!decoded) {
-      return res.status(404).json({status:false, result:  'Erro no jwt' });
+      return res.status(200).json({status:false, result:  'Erro no jwt' });
     }
     req.userId = decoded.userId;
     return res.status(200).json({status:true, result:decoded});
