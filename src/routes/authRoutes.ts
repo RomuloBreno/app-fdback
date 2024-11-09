@@ -5,8 +5,8 @@ import { rateLimiter } from '../middleware/RateLimit.ts';
 
 const authRouter = Router();
 
-authRouter.post('/register', rateLimiter, AuthController.register);
+authRouter.post('/register', AuthController.register);
 authRouter.post('/l-fdback', AuthController.login);
 authRouter.get('/t-fdback', AuthController.decrypt);
 
-export {authRouter};
+export { authRouter };

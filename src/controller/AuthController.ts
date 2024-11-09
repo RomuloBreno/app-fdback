@@ -3,15 +3,16 @@ import { generateToken, verifyToken } from '../utils/tokenUtil.ts';
 import User from '../entities/User.ts';
 
 class AuthController {
-  async register(req: any, res: any): Promise<Response> {
+  async register(req: any, res: any): Promise<any> {
+    //validação para envio de json
     if (typeof req.body === 'string') {
-      return res.status(400).json({status:false, result:  'JSON is not valid' });
+      return res.status(400).json({status:false, result:  'Dados Invalidos' });
     }
-    // const {name, nick, email, job, password } = req.body;
-    const { result } = req.body;
 
+    //valida a base64 
+    const { result } = req.body;
     if(!isBase64(result))
-      return res.status(404).json({status:false, result:  'Usuário não encontrado' });
+      return res.status(404).json({status:false, result:  'JSON Invalido' });
 
     let decoded = atob(result).split(':')
     const name = decoded[0]
@@ -21,7 +22,9 @@ class AuthController {
     const password = decoded[4]
 
     try {
-      await AuthService.register(name, nick, email, job, password);
+      const user = await AuthService.register(name, nick, email, job, password);
+      if(!user || !user?.email)
+        return res.status(400).json({status:false, result:  'Erro ao registrar o usuário' });
       return res.status(201).json({status:true, result:  'Usuário registrado com sucesso' });
     } catch (error) {
       if(error.message.split(" ").includes("duplicate"))
@@ -30,32 +33,33 @@ class AuthController {
     }
   }
 
-  async login(req: any, res: any): Promise<Response> {
+  async login(req: any, res: any): Promise<any> {
+    //validação para envio de json
     if (typeof req.body === 'string') {
-      return res.status(400).json({status:false, result:  'Credenciais inválidas' });
+      return res.status(400).json({status:false, result:  'Dados Invalidos' });
     }
+    //valida a base 64 enviada
     const { result } = req.body;
     if(!isBase64(result))
-      return res.status(404).json({status:false, result:  'Usuário não encontrado' });
-
+      return res.status(404).json({status:false, result:  'JSON Invalido' });
+    //mapeia base64 para variaveis
     let decoded = atob(result).split(':')
     const email = decoded[0]
     const pass = decoded[1]
+    if(email === '' || pass==='' || email=== null || pass ===null)
+      return res.status(404).json({status:false, result:  'Dados do JSON invalidos' });
+
+    //valida se o usuário enviado existe e se a senha é compativel
     const isValidUser = await AuthService.validateUser(email,pass);
-    if (!isValidUser) {
+    if (!isValidUser.valid) {
       return res.status(400).json({status:false, result:  'Credenciais inválidas' });
     }
-    const user = await User.findOne({ email: email });
-    if (!user) {
-      return res.status(404).json({status:false, result:  'Usuário não encontrado' });
-      
-    }
     // Gera o token JWT com o ID do usuário
-    const token = await generateToken(user.id);
+    const token = await generateToken(isValidUser.user);
     return res.status(200).json({status:true, result:token });
   }
 
-  async decrypt(req: any, res: any): Promise<Response> {
+  async decrypt(req: any, res: any): Promise<any> {
     const token = req.headers.authorization?.split(' ')[1];
     const decoded = verifyToken(token);
     if (!decoded) {

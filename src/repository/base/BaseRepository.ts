@@ -25,7 +25,10 @@ export class BaseRepository<T extends Document> {
     }
 
     async update(id: string, item: Partial<T>): Promise<T | null> {
-        return this.model.findByIdAndUpdate(id, item, { new: true }).exec();
+        const { _id, ...updateData } = item.toObject ? item.toObject() : item; // Ignora _id ao copiar
+
+        return this.model.findByIdAndUpdate(id, updateData, { new: true }).exec();
+
     }
 
     async delete(id: string): Promise<T | null> {

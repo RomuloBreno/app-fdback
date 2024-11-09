@@ -22,7 +22,7 @@ class UserService implements IUserServices {
     return result
   }
   public async update(id: string, req:any) {
-    let user: IUser = new User(req.body);
+    let user = new User(req.body);
     let result = await repository.update(id, user)
     return result
   }
