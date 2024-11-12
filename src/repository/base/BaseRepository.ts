@@ -12,7 +12,17 @@ export class BaseRepository<T extends Document> {
     }
 
     async getAll(): Promise<T[]> {
-        return this.model.find().exec();
+        return this.model.aggregate([
+            {
+              $addFields: {
+                creationDate: { $toDate: "$_id" } // Converte o _id para uma data e cria o campo "creationDate"
+              }
+            },
+            {
+              $sort: { creationDate: -1 } // Ordena os documentos pela data de criação de forma decrescente
+            }
+          ]).exec();
+          
     }
 
     async getById(id: string): Promise<T | null> {

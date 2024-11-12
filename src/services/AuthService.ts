@@ -2,7 +2,9 @@ import bcrypt from 'bcrypt';
 import User from '../entities/User.ts';
 import type { IUser } from '../entities/User.ts';
 import UserRepository from "../repository/UserRepository.ts";
+import {generateSignedUrl} from "../utils/s3Utils.ts";
 import dotenv from "dotenv";
+import { generateToken } from '../utils/tokenUtil.ts';
 
 dotenv.config()
 
@@ -21,6 +23,42 @@ class AuthService {
     
     return {user:user.id, valid:bcrypt.compare(password, user.passwordHash)}
   }
+  async createUrlSigned(key: string, extension:string): Promise<any> {
+    return generateSignedUrl(key, extension)
+  }
+  async login(result: any,): Promise<any> {
+      //mapeia base64 para variaveis
+      const decoded = atob(result).split(':')
+      const email = decoded[0]
+      const pass = decoded[1]
+      if(email === '' || pass==='' || email=== null || pass ===null)
+        return false
+  
+      //valida se o usuário enviado existe e se a senha é compativel
+      const isValidUser = await this.validateUser(email,pass);
+      if (!isValidUser.valid) {
+        return false
+      }
+      // Gera o token JWT com o ID do usuário
+      return await generateToken(isValidUser.user);
+  }
+
+  async validateRegister(result: any): Promise<any> {
+    //valida a base64 
+    let decoded = atob(result).split(':')
+    const name = decoded[0]
+    const nick = decoded[1]
+    const email = decoded[2]
+    const job = decoded[3]
+    const password = decoded[4]
+
+      const user = await this.register(name, nick, email, job, password);
+      if(!user || !user?.email)
+        return false
+      return user
+  }
+
+
 }
 
 export default new AuthService();

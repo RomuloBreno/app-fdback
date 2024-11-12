@@ -1,6 +1,7 @@
 import AuthService from '../services/AuthService.ts'
-import { generateToken, verifyToken } from '../utils/tokenUtil.ts';
-import User from '../entities/User.ts';
+import { verifyToken } from '../utils/tokenUtil.ts';
+import { isBase64 } from '../utils/base64Utils.ts';
+import path from 'path';
 
 class AuthController {
   async register(req: any, res: any): Promise<any> {
@@ -8,29 +9,13 @@ class AuthController {
     if (typeof req.body === 'string') {
       return res.status(400).json({status:false, result:  'Dados Invalidos' });
     }
-
-    //valida a base64 
     const { result } = req.body;
     if(!isBase64(result))
       return res.status(404).json({status:false, result:  'JSON Invalido' });
-
-    let decoded = atob(result).split(':')
-    const name = decoded[0]
-    const nick = decoded[1]
-    const email = decoded[2]
-    const job = decoded[3]
-    const password = decoded[4]
-
-    try {
-      const user = await AuthService.register(name, nick, email, job, password);
-      if(!user || !user?.email)
-        return res.status(400).json({status:false, result:  'Erro ao registrar o usuário' });
-      return res.status(201).json({status:true, result:  'Usuário registrado com sucesso' });
-    } catch (error) {
-      if(error.message.split(" ").includes("duplicate"))
-        return res.status(400).json({status:false, result:  'Erro ao registrar o usuário, esse e-mail ja foi registrado' });
-      return res.status(400).json({status:false, result:  'Erro ao registrar o usuário' });
-    }
+    const user = await AuthService.validateRegister(result)
+    if(!user)
+      return res.status(404).json({status:false, result:  'Não foi possivel registrar o usuário' });
+    return res.status(200).json({status:true, result:user });
   }
 
   async login(req: any, res: any): Promise<any> {
@@ -42,23 +27,12 @@ class AuthController {
     const { result } = req.body;
     if(!isBase64(result))
       return res.status(404).json({status:false, result:  'JSON Invalido' });
-    //mapeia base64 para variaveis
-    let decoded = atob(result).split(':')
-    const email = decoded[0]
-    const pass = decoded[1]
-    if(email === '' || pass==='' || email=== null || pass ===null)
-      return res.status(404).json({status:false, result:  'Dados do JSON invalidos' });
-
-    //valida se o usuário enviado existe e se a senha é compativel
-    const isValidUser = await AuthService.validateUser(email,pass);
-    if (!isValidUser.valid) {
-      return res.status(400).json({status:false, result:  'Credenciais inválidas' });
-    }
-    // Gera o token JWT com o ID do usuário
-    const token = await generateToken(isValidUser.user);
+    const token = await AuthService.login(result)
+    if(!token)
+      return res.status(404).json({status:false, result:  'Não foi possivel autenticar o usuário' });
     return res.status(200).json({status:true, result:token });
   }
-
+  
   async decrypt(req: any, res: any): Promise<any> {
     const token = req.headers.authorization?.split(' ')[1];
     const decoded = verifyToken(token);
@@ -68,22 +42,22 @@ class AuthController {
     req.userId = decoded.userId;
     return res.status(200).json({status:true, result:decoded});
   }
+
+  async urlImage(req: any, res: any): Promise<any> {
+    if (!req.body.fileName) {
+      return res.status(400).json({ status: false, result: 'No file uploaded.' });
+    }
+    const fileName = req.body.fileName;  // Nome original do arquivo
+    const key = req.body.key;  // chavbe com path do arquivo
+    const extension = path.extname(fileName); // Extrai a extensão
+    const urlAssigned = await AuthService.createUrlSigned(key, extension)
+    if(!urlAssigned)
+      return res.status(400).json({status:false, result:null });
+    return res.status(200).json({status:true, result:urlAssigned });
+    
+  }
 }
   
-function isBase64(str:string) {
-  if (typeof str !== 'string') {
-      return false;
-  }
-
-  // Verifica se a string está vazia ou tem um comprimento múltiplo de 4
-  if (str.length === 0 || str.length % 4 !== 0) {
-      return false;
-  }
-
-  // Expressão regular para validar o formato Base64
-  const base64Regex = /^[A-Za-z0-9+/]+={0,2}$/;
-  return base64Regex.test(str);
-}
 
 
 export default new AuthController();

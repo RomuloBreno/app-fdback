@@ -14,7 +14,7 @@ class PostController {
     try {
       var result: IPost = await service.InsertPost(req);
       if (!result){
-        return res.status(404).json({status:false, result:  'User not created' });
+        return res.status(404).json({status:false, result:  'Post not created' });
       }
       return res.status(201).json({status:true, result:{id: result.id, owner: result.owner} });
     } catch (error) {

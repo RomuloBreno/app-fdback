@@ -6,6 +6,7 @@ import type { IFeedbackServices } from "../interfaces/services/IFeedbackServices
 import FeedbackRepository from "../repository/FeedbacksRepository.ts";
 import PostRepository from "../repository/PostRepository.ts";
 import mongoose from "mongoose";
+import Feedback from "../entities/Feedbacks.ts";
 
 let repositoryFeedBack = FeedbackRepository;
 let repositoryPost = PostRepository;
@@ -14,6 +15,7 @@ class FeedbacksService implements IFeedbackServices {
     public async InsertFeedback(req: any, res: any): Promise<IFeedback> {
         let postById = await Post.findById(req.params.postId)//change to get in file service
         let feedbacks = new Feedbacks(req.body);
+        feedbacks.author = postById?.id
         if (!postById)
             return res.status(401).json({status:false, result: 'Invalid comment data' });
         repositoryFeedBack.create(feedbacks)
@@ -23,19 +25,18 @@ class FeedbacksService implements IFeedbackServices {
         repositoryPost.update(postById.id, postById)//save comment in post
         return feedbacks
     }
-    public async getById(id: string){
+    public async getById(id: string ): Promise<IFeedback | null | false>{
       if (!mongoose.Types.ObjectId.isValid(id))
         return false
-        let result = await repositoryFeedBack.getById(id)
+        let result: IFeedback | null = await repositoryFeedBack.getById(id)
         return result
       }
 
-      public async getFeedbacksByPostId(id: string):Promise<IFeedback[] | undefined | false>{
+      public async getFeedbacksByPostId(id: string):Promise<IFeedback[] | null | false>{
         if (!mongoose.Types.ObjectId.isValid(id))
           return false
-        let result = await repositoryPost.getById(id)
-        let feedbacks:IFeedback[] | undefined | false = result?.comments
-        return feedbacks
+        let result = await repositoryFeedBack.getAllByPostId(id)
+        return result
       }
 
 }
