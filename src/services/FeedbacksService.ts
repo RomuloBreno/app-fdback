@@ -15,7 +15,6 @@ class FeedbacksService implements IFeedbackServices {
     public async InsertFeedback(req: any, res: any): Promise<IFeedback> {
         let postById = await Post.findById(req.params.postId)//change to get in file service
         let feedbacks = new Feedbacks(req.body);
-        feedbacks.author = postById?.id
         if (!postById)
             return res.status(401).json({status:false, result: 'Invalid comment data' });
         repositoryFeedBack.create(feedbacks)

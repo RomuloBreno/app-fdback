@@ -8,7 +8,6 @@ export interface ILogger extends Document {
     method: string;
 }
 
-// Esquema do Post
 const LoggerSchema: Schema = new Schema({
     status: { type: String, required: true },
     statusCode: { type: String, required: true },
@@ -16,7 +15,6 @@ const LoggerSchema: Schema = new Schema({
     method: { type: String, required: true }
 });
 
-// Modelo do Post
 const Logger = mongoose.model<ILogger>('Logger', LoggerSchema);
 
 export default Logger
