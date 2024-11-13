@@ -20,7 +20,7 @@ class FeedbacksService implements IFeedbackServices {
         repositoryFeedBack.create(feedbacks)
 
         //put comment in array post
-        postById.comments?.push(feedbacks)
+        postById.comments?.push(feedbacks.id)
         repositoryPost.update(postById.id, postById)//save comment in post
         return feedbacks
     }

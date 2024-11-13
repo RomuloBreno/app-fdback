@@ -6,7 +6,7 @@ export interface IPost extends Document {
     title: string;
     description: string;
     path: string[];
-    comments?: IFeedback[]; // Array de comentários
+    comments?: mongoose.Schema.Types.ObjectId[]; // Array de comentários
     owner: mongoose.Schema.Types.ObjectId; // Referência ao usuário
 }
 
