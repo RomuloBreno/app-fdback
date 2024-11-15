@@ -15,7 +15,7 @@ class PostService implements IPostServices {
         if (!mongoose.Types.ObjectId.isValid(id))
             return false
         let result = await repository.getById(id)
-        const creationDate = new Date(result?.id?.getTimestamp());
+        const creationDate = new Date(result?._id?.getTimestamp());
         return { ...result?.toObject(), creationDate };
     }
     public async getAll() : Promise<IPost[]>{

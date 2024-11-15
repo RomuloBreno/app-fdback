@@ -24,7 +24,12 @@ class AuthController {
       return res.status(400).json({status:false, result:  'Dados Invalidos' });
     }
     //valida a base 64 enviada
-    const { result } = req.body;
+    const { result, rcapt } = req.body;
+    const userIp = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+    const userAgent = req.get('User-Agent');
+    const validRecaptcha = await AuthService.validRecaptcha(rcapt, userIp, userAgent)
+    if(!validRecaptcha || validRecaptcha < 0.3)
+      return res.status(400).json({ success: false, message: 'O reCAPTCHA é obrigatório.' });
     if(!isBase64(result))
       return res.status(404).json({status:false, result:  'JSON Invalido' });
     const token = await AuthService.login(result)
