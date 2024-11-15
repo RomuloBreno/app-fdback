@@ -2,7 +2,6 @@ import AuthService from '../services/AuthService.ts'
 import { verifyToken } from '../utils/tokenUtil.ts';
 import { isBase64 } from '../utils/base64Utils.ts';
 import path from 'path';
-
 class AuthController {
   async register(req: any, res: any): Promise<any> {
     //validação para envio de json
