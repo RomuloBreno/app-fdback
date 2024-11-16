@@ -14,8 +14,15 @@ class FollowService implements IFollowService {
     return FollowRemove ? FollowRemove : false 
   }
   async getQtdFollow(id: string): Promise<IFollows | null> {
-    const FollowRemove = await repository.getQtdFollows(id)
-    return FollowRemove 
+    const getQtdFollow = await repository.getQtdFollows(id)
+    return getQtdFollow ? getQtdFollow : null 
+  }
+  async youFollowMe(anotherUserId:string, userId: string): Promise<boolean | null> {
+    const FollowRemove = await repository.getById(anotherUserId)
+    const findFollower = FollowRemove?.followers.indexOf(userId)
+    if(findFollower === -1 || findFollower === undefined)
+      return false
+    return true 
   }
  
 }

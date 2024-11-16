@@ -5,6 +5,7 @@ import cors from 'cors';
 import { feedbackRouter } from './routes/feedbacksRoutes.ts';
 import { postRouter } from './routes/postRoutes.ts';
 import { userRouter } from './routes/userRoute.ts';
+import { followsRouter } from './routes/followsRoutes.ts';
 
 dotenv.config()
 const app = express();
@@ -16,7 +17,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.set('trust proxy', 1);
 app.use(express.json());
-app.use('/v1', feedbackRouter, postRouter, userRouter);
+app.use('/v1', feedbackRouter, postRouter, userRouter, followsRouter);
 app.use('/auth', authRouter);
 app.get('/terms',(req:any, res:any) =>{
   return res.json({
