@@ -8,7 +8,7 @@ const likeRouter = Router();
 
 likeRouter.post('/publish-like/:postId', authMiddleware, LikeController.toggleLike);
 likeRouter.get('/likes-qtd/:postId', authMiddleware, LikeController.getQtdLike);
-likeRouter.get('/you-follow-me/:postId/:userId', authMiddleware, LikeController.youLikedPost);
+likeRouter.get('/you-like-post/:postId/:userId', authMiddleware, LikeController.youLikedPost);
 
 
 export { likeRouter };

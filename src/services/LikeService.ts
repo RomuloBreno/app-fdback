@@ -24,9 +24,9 @@ class LikeService implements ILikeService {
 
     return validUserLiked || false
   }
-  async getQtdLike(id: string): Promise<ILikes | null> {
+  async getQtdLike(id: string): Promise<number | null> {
     const getQtdLike = await repository.getQtdLikes(id)
-    return getQtdLike ? getQtdLike : null
+    return getQtdLike ? getQtdLike.qtdLikes : null
   }
 
 
