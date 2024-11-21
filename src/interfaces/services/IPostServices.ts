@@ -4,4 +4,5 @@ export interface IPostServices{
     InsertPost(req: Request): Promise<IPost>;
     getById(id:string):Promise<any>;
     getAll():Promise<IPost[]>;
+    getPostsByFollowing(userId:string):Promise<IPost[] | null>;
 }

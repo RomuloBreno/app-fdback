@@ -6,6 +6,9 @@ import mongoose from "mongoose";
 
 let repository = PostRepository
 class PostService implements IPostServices {
+    public async getPostsByFollowing(userId:string): Promise<IPost[] | null> {
+        return await repository.getPostsByFollowing(userId);
+    }
     // Método para exibir informações do usuário
     public async InsertPost(req: Request): Promise<IPost> {
         let post = new Post(req.body);

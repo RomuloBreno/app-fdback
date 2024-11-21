@@ -35,5 +35,12 @@ class PostController {
       return res.status(404).json({status:false, result:  'Not find' });
     return res.status(200).json({status:true, result: resultPost });
   }
+  public async getPostsByFollowing(req: any, res: any) {
+    let userId = req.params.userId;
+    var resultPost: IPost[] | null = await service.getPostsByFollowing(userId);
+    if (!resultPost)
+      return res.status(404).json({status:false, result:  'Not find' });
+    return res.status(200).json({status:true, result: resultPost });
+  }
 }
 export default PostController
