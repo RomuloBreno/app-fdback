@@ -5,7 +5,7 @@ import UserRepository from "../repository/UserRepository.ts";
 import { generateSignedUrl } from "../utils/s3Utils.ts";
 import dotenv from "dotenv";
 import { generateToken } from '../utils/tokenUtil.ts';
-import { createAssessment } from '../utils/recaptcha.ts';
+import { createAssessment } from '../utils/reCaptcha.ts';
 
 dotenv.config()
 
