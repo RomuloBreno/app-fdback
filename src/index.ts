@@ -10,9 +10,9 @@ import { likeRouter } from './routes/likeRoutes.ts';
 
 dotenv.config()
 const app = express();
-const PORT = process.env?.PORT || 5000;
+const PORT = process.env.PORT || 5000;
 const corsOptions = {
-  origin: process.env?.FRONT_END
+  origin: process.env.FRONT_END
 };
 
 app.use(cors(corsOptions));
