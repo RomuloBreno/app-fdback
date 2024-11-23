@@ -1,8 +1,12 @@
 import type { IPost } from "../../entities/Post.ts";
+import type { IPostStory } from "../../entities/PostStory.ts";
 
 export interface IPostServices{
-    InsertPost(req: Request): Promise<IPost>;
+    InsertPost(req: any): Promise<IPost>;
+    InsertPostStory(req: any): Promise<IPostStory>
     getById(id:string):Promise<any>;
     getAll():Promise<IPost[]>;
     getPostsByFollowing(userId:string):Promise<IPost[] | null>;
+    getPostsByStoryPosts(postStory:string): Promise<(IPost | null)[]>
+    getPostsStorybyOwner(ownerId:string) : Promise<IPostStory[]>
 }
