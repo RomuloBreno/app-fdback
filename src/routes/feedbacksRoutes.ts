@@ -15,6 +15,9 @@ feedbackRouter.get('/feedback/:id', authMiddleware, async (req: any, res: any) =
 feedbackRouter.get('/feedbacks/:postId', authMiddleware, async (req: any, res: any) => {
   feedbackController.getFeedbacksByPostId(req, res, req.params.postId)
 });
+feedbackRouter.get('/feedbacks-feed/:postId', authMiddleware, async (req: any, res: any) => {
+  feedbackController.getFeedbacksWithFilterByPostId(req, res, req.params.postId)
+});
 
 
 export { feedbackRouter }

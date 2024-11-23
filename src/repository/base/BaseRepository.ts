@@ -1,5 +1,5 @@
 
-import { Document, Model } from 'mongoose';
+import mongoose, { Document, Model } from 'mongoose';
 import {connect} from '../../database/mongodb.ts';
 
 // repositories/BaseRepository.ts
@@ -24,6 +24,7 @@ export class BaseRepository<T extends Document> {
           ]).exec();
           
     }
+
 
     async getById(id: string): Promise<T | null> {
         return this.model.findById(id).select('-passwordHash').exec();

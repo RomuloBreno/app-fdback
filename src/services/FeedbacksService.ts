@@ -37,6 +37,12 @@ class FeedbacksService implements IFeedbackServices {
         let result = await repositoryFeedBack.getAllByPostId(id)
         return result
       }
+      public async getFeedbacksWithFilterByPostId(id: string):Promise<IFeedback[] | null | false>{
+        if (!mongoose.Types.ObjectId.isValid(id))
+          return false
+        let result = await repositoryFeedBack.getWithFilterByPostId(id)
+        return result
+      }
 
 }
 

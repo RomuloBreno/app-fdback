@@ -24,6 +24,23 @@ export class FeedbackRepository extends BaseRepository<IFeedback> {
           ]).exec();
           
     }
+    async getWithFilterByPostId(id:string): Promise<IFeedback[]> {
+      return this.model.aggregate([
+        {
+            $match: {
+                postId: new mongoose.Types.ObjectId(id), // Filtra os documentos pelo `postId`
+            },
+        },
+        {
+            $sort: { creationDate: -1 }, // Ordena pela data de criação de forma decrescente
+        },
+        {
+            $limit: 5, // Retorna no máximo 3 registros (para obter do 6º ao 8º)
+        },
+    ]);
+    
+          
+    }
 }
 
 export default new FeedbackRepository();

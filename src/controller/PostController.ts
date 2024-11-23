@@ -1,4 +1,5 @@
 import type { IPost } from "../entities/Post.ts";
+import type { IPostStory } from "../entities/PostStory.ts";
 import type { IPostServices } from '../interfaces/services/IPostServices.ts';
 import type { ILoggerService } from '../interfaces/logger/ILoggerService.ts';
 import PostService from '../services/PostService.ts';
@@ -42,5 +43,24 @@ class PostController {
       return res.status(404).json({status:false, result:  'Not find' });
     return res.status(200).json({status:true, result: resultPost });
   }
+  public async getPostsByPostStory(req: any, res: any) {
+    let postStory = req.params.postStoryId;
+    var resultPost: (IPost | null)[] = await service.getPostsByStoryPosts(postStory);
+    if (!resultPost)
+      return res.status(404).json({status:false, result:  'Not find' });
+    return res.status(200).json({status:true, result: resultPost });
+  }
+
+//POST STORY
+public async getPostsStorybyOwner(req: any, res: any) {
+  let ownerId = req.params.ownerId
+  var resultPost: IPostStory[] = await service.getPostsStorybyOwner(ownerId);
+  if (!resultPost)
+    return res.status(404).json({status:false, result:  'Not find' });
+  return res.status(200).json({status:true, result: resultPost });
 }
+
+}
+
+
 export default PostController
