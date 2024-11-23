@@ -5,6 +5,8 @@ import LikeRepository from "../repository/LikeRepository.ts";
 let repository = LikeRepository
 class LikeService implements ILikeService {
   async youLikedPost(postId: string, userId: string): Promise<boolean | null> {
+    if(!postId)
+      return false
     const likedPost = await repository.getByPost(postId)
     const findFollower = likedPost?.usersLiked?.includes(userId)
     if(!findFollower)
@@ -25,6 +27,8 @@ class LikeService implements ILikeService {
     return validUserLiked || false
   }
   async getQtdLike(id: string): Promise<number | null> {
+    if(!id)
+      return null
     const getQtdLike = await repository.getQtdLikes(id)
     return getQtdLike ? getQtdLike.qtdLikes : null
   }

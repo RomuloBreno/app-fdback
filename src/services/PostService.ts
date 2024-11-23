@@ -32,11 +32,10 @@ class PostService implements IPostServices {
     // Método para exibir informações do usuário
     public async InsertPost(req: any): Promise<IPost> {
         const {postStoryPattern} = req.body
-        let PostStoryCreatedOrUpdated: IPostStory | null;
+        let PostStoryCreatedOrUpdated;
         let post = new Post(req.body);
         let postCreated =  await repository.create(post);
   
-        if (postCreated) {
             // Verifica se o padrão `postStoryPattern` é válido
             if (postStoryPattern) {
                 // Busca o PostStory existente pelo padrão
@@ -45,6 +44,7 @@ class PostService implements IPostServices {
                 // Adiciona o ID do post criado ao PostStory encontrado
                 existingPostStory?.postStory?.push(postCreated?.id);
                 existingPostStory?.save();
+                PostStoryCreatedOrUpdated = existingPostStory
             } else {
                 // Inicializa um novo PostStory com os dados da requisição
                 let postStory = new PostStory(req.body);
@@ -54,12 +54,10 @@ class PostService implements IPostServices {
                 PostStoryCreatedOrUpdated = await repositoryPostStory.create(postStory);
             }
         
-            // Atualiza o campo `postStoryPattern` no post criado com o ID do PostStory
             postCreated.postStoryPattern = PostStoryCreatedOrUpdated?.id;
         
             // Salva as alterações no repositório de posts
             postCreated.save()
-        }
         
         return postCreated
     }
