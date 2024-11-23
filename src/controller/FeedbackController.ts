@@ -36,6 +36,12 @@ class FeedbackController{
         return res.status(404).json({status:false, result:  'Not find Comments'});
       return res.status(200).json({status:true, result: feedbacksByPostId});
     }
+    public async getFeedbacksWithFilterByPostId(req:any, res:any, id:string){
+      let feedbacksByPostId = await service.getFeedbacksWithFilterByPostId(id)
+      if(!feedbacksByPostId)
+        return res.status(404).json({status:false, result:  'Not find Comments'});
+      return res.status(200).json({status:true, result: feedbacksByPostId});
+    }
 
 }
 export default FeedbackController
