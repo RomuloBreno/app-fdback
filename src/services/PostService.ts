@@ -68,6 +68,18 @@ class PostService implements IPostServices {
         const creationDate = new Date(result?._id?.getTimestamp());
         return { ...result?.toObject(), creationDate };
     }
+    public async getPostsByUser(id: string) : Promise<(IPost | null)[] | false>{
+        if (!mongoose.Types.ObjectId.isValid(id))
+            return false
+        let postsArr: (IPost | null)[] = await repository.getPostsByUser(id)
+        let postsByUserId: (IPost | null)[] = await Promise.all(
+            postsArr.map((post)=>{
+                const creationDate = new Date(post?._id?.getTimestamp());
+                return { ...post?.toObject(), creationDate };
+                }) || []
+            )
+        return postsByUserId;
+    }
     public async getAll() : Promise<IPost[]>{
         let result = await repository.getAll()
         return result

@@ -30,6 +30,12 @@ class PostController {
       return res.status(404).json({status:false, result:  'Not find' });
     return res.status(200).json({status:true, result: resultPost });
   }
+  public async getPostsByUser(req: any, res: any, id: string) {
+    var resultPost: (IPost | null)[] | false = await service.getPostsByUser(id);
+    if (!resultPost)
+      return res.status(404).json({status:false, result:  'Not find' });
+    return res.status(200).json({status:true, result: resultPost });
+  }
   public async getAll(req: any, res: any) {
     var resultPost: IPost[] = await service.getAll();
     if (!resultPost)

@@ -51,6 +51,12 @@ export class PostRepository extends BaseRepository<IPost> {
     return postsByPostStoryId
 
   }
+  async getPostsByUser(userId: string): Promise<(IPost | null)[]> {
+    const posts: IPost[] | null = await Post.find({ owner: userId }).exec();
+    // Dividindo os termos pela barra vertical '|' e removendo espaços extras
+    return posts
+
+  }
 }
 
 export default new PostRepository();
