@@ -6,13 +6,14 @@ import User from '../entities/User.ts';
 import type { IPost } from '../entities/Post.ts';
 import type { IUser } from '../entities/User.ts';
 import type { IPostStory } from '../entities/PostStory.ts';
+import mongoose from 'mongoose';
 
 // repositories/UserRepository.ts
 export class PostRepository extends BaseRepository<IPost> {
   constructor() {
     super(Post); // Passa o modelo UserModel para o BaseRepository
   }
-  async getPostsByFollowing(userId: string): Promise<IPost[] | null> {
+  async getPostsByFollowing(userId: string, limit?:number): Promise<IPost[] | null> {
     const userFollowing: IUser | null = await User.findOne({ _id: userId }).exec();
     // Dividindo os termos pela barra vertical '|' e removendo espaços extras
     const terms = userFollowing?.job.split('|').map(term => term.trim());
@@ -35,6 +36,9 @@ export class PostRepository extends BaseRepository<IPost> {
       },
       {
         $sort: { creationDate: -1 } // Ordena os documentos pela data de criação de forma decrescente
+      },
+      {
+        $limit: limit || 40
       }
     ]).exec();
 
@@ -51,8 +55,24 @@ export class PostRepository extends BaseRepository<IPost> {
     return postsByPostStoryId
 
   }
-  async getPostsByUser(userId: string): Promise<(IPost | null)[]> {
-    const posts: IPost[] | null = await Post.find({ owner: userId }).exec();
+  async getPostsByUser(userId: string, limit?:number): Promise<(IPost | null)[]> {
+    const posts: IPost[] | null = await Post.aggregate([
+      // Filtra os documentos pelo campo "owner"
+      {
+          $match: {
+              owner: new mongoose.Types.ObjectId(userId), // Certifique-se de converter o userId se necessário
+          },
+      },
+      // Ordena os documentos por ordem de criação decrescente (_id implícito)
+      {
+          $sort: { _id: -1 },
+      },
+      // Limita a quantidade de resultados
+      {
+          $limit: limit || 100, // Defina o número máximo de documentos a serem retornados
+      },
+  ]).exec();
+  
     // Dividindo os termos pela barra vertical '|' e removendo espaços extras
     return posts
 

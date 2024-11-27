@@ -13,7 +13,7 @@ postRouter.post('/publish', authMiddleware, postController.handle);
 // postRouter.get('/posts', authMiddleware, async (req: any, res: any) => {
 //     postController.getAll(req, res)
 // });
-postRouter.get('/posts-feed-following/:userId', authMiddleware, async (req: any, res: any) => {
+postRouter.post('/posts-feed-following/:userId', authMiddleware, async (req: any, res: any) => {
     postController.getPostsByFollowing(req, res)
 });
 postRouter.get('/posts-story/:postStoryId', authMiddleware, async (req: any, res: any) => {
@@ -25,7 +25,7 @@ postRouter.get('/posts-story-owner/:ownerId', authMiddleware, async (req: any, r
 postRouter.get('/post/:id', authMiddleware, async (req: any, res: any) => {
     postController.getById(req, res, req.params.id)
 });
-postRouter.get('/posts/user/:userId', authMiddleware, async (req: any, res: any) => {
+postRouter.post('/posts/user/:userId', authMiddleware, async (req: any, res: any) => {
     postController.getPostsByUser(req, res, req.params.userId)
 });
 
