@@ -10,5 +10,7 @@ followsRouter.post('/follow-user/:anotherUserId/', authMiddleware,  FollowContro
 followsRouter.post('/unfollow-user/:anotherUserId', authMiddleware, FollowController.removeFollow);
 followsRouter.get('/follows-qtd/:userId', authMiddleware, FollowController.getQtdFollow);
 followsRouter.get('/you-follow-me/:anotherUserId/:userId', authMiddleware, FollowController.youFollowMe);
+followsRouter.get('/followers/user/:userId', authMiddleware, FollowController.getFollowersByUser);
+followsRouter.get('/following/user/:userId', authMiddleware, FollowController.getFollowingByUser);
 
 export { followsRouter };

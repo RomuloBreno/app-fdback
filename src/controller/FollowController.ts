@@ -42,6 +42,22 @@ class FollowController {
     return res.status(200).json({status:true, result:qtdFollows });
     
   }
+  async getFollowersByUser(req: any, res: any): Promise<any> {
+    const userId = req.params.userId
+    if(!userId)
+        return res.status(404).json({status:false, result:  'Não é possivel listar os follows de usuário não fornecido' });
+    const followers = await service.getFollowersByUser(userId)
+    return res.status(200).json({status:true, result:followers });
+    
+  }
+  async getFollowingByUser(req: any, res: any): Promise<any> {
+    const userId = req.params.userId
+    if(!userId)
+        return res.status(404).json({status:false, result:  'Não é possivel listar os follows de usuário não fornecido' });
+    const following = await service.getFollowingByUser(userId)
+    return res.status(200).json({status:true, result:following });
+    
+  }
   async youFollowMe(req: any, res: any): Promise<any> {
     const anotherUserId = req.params.anotherUserId
     const userId = req.params.userId

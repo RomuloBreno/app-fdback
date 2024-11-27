@@ -70,9 +70,14 @@ export class FollowRepository extends BaseRepository<IFollows> {
             return false;
           }
         }
-
     async getQtdFollows(userId: string): Promise<IFollows | null> {
         return await Follows.findOne({ _id: userId }).select('qtdFollowers qtdFollowing').exec();
+    }
+    async getFollowers(userId: string): Promise<IFollows | null> {
+        return await Follows.findOne({ _id: userId }).select('followers').exec();
+    }
+    async getFollowing(userId: string): Promise<IFollows | null> {
+        return await Follows.findOne({ _id: userId }).select('following').exec();
     }
 }
 
