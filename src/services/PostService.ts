@@ -15,8 +15,8 @@ class PostService implements IPostServices {
         let postStory = new PostStory(req.body);
         return await repositoryPostStory.create(postStory);
     }
-    public async getPostsByFollowing(userId:string): Promise<IPost[] | null> {
-        return await repository.getPostsByFollowing(userId);
+    public async getPostsByFollowing(userId:string, limit?:number): Promise<IPost[] | null> {
+        return await repository.getPostsByFollowing(userId, limit);
     }
     public async getPostsByStoryPosts(postStory:string): Promise<(IPost | null)[]> {
         let postsArr: (IPost | null)[] = await repository.getPostsByPostStory(postStory);
@@ -67,6 +67,18 @@ class PostService implements IPostServices {
         let result = await repository.getById(id)
         const creationDate = new Date(result?._id?.getTimestamp());
         return { ...result?.toObject(), creationDate };
+    }
+    public async getPostsByUser(id: string, limit?:number) : Promise<(IPost | null)[] | false>{
+        if (!mongoose.Types.ObjectId.isValid(id))
+            return false
+        let postsArr: (IPost | null)[] = await repository.getPostsByUser(id, limit)
+        let postsByUserId: any = await Promise.all(
+            postsArr.map((post)=>{
+                const creationDate = new Date(post?._id?.getTimestamp());
+                return { ...post, creationDate };
+                }) || []
+            )
+        return postsByUserId;
     }
     public async getAll() : Promise<IPost[]>{
         let result = await repository.getAll()

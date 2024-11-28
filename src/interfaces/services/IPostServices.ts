@@ -6,7 +6,8 @@ export interface IPostServices{
     InsertPostStory(req: any): Promise<IPostStory>
     getById(id:string):Promise<any>;
     getAll():Promise<IPost[]>;
-    getPostsByFollowing(userId:string):Promise<IPost[] | null>;
+    getPostsByFollowing(userId:string, limit?:number):Promise<IPost[] | null>;
+    getPostsByUser(userId:string, limit?:number):Promise<(IPost | null)[] | false>;
     getPostsByStoryPosts(postStory:string): Promise<(IPost | null)[]>
     getPostsStorybyOwner(ownerId:string) : Promise<IPostStory[]>
 }
