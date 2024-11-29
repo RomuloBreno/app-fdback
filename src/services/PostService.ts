@@ -16,7 +16,17 @@ class PostService implements IPostServices {
         return await repositoryPostStory.create(postStory);
     }
     public async getPostsByFollowing(userId:string, limit?:number): Promise<IPost[] | null> {
-        return await repository.getPostsByFollowing(userId, limit);
+        let posts: IPost[] | null = []
+        const getPostsByFollowing: IPost[] | null=  await repository.getPostsByFollowing(userId, limit);
+        const getPostsByjob: IPost[] | null =  await repository.getPostsByJob(userId, limit);
+        getPostsByFollowing?.map((e)=>{
+            posts.push(e)
+        })
+        // getPostsByjob?.map((e)=>{
+        //     if(!(posts.indexOf(e) === -1))
+        //         posts.push()
+        // })
+        return posts
     }
     public async getPostsByStoryPosts(postStory:string): Promise<(IPost | null)[]> {
         let postsArr: (IPost | null)[] = await repository.getPostsByPostStory(postStory);
