@@ -6,8 +6,8 @@ import dotenv from 'dotenv'
 import { authRouter } from './routes/authRoutes.ts'
 import cors from 'cors';
 
-import { userRouter } from './routes/userRoute.ts';
-import { followsRouter } from './routes/followsRoutes.ts';
+import { notifyRouter } from './routes/notifyRoutes.ts';
+import { userRouter } from './routes/userRoutes.ts';
 import { verifyToken } from './utils/tokenUtil.ts';
 
 import createFeedbackRouter from './routes/feedbacksRoutes.ts';
@@ -64,7 +64,7 @@ wss.on('connection', (ws: WebSocket, req: any) => {
 app.use(cors(corsOptions));
 app.set('trust proxy', 1);
 app.use(express.json());
-app.use('/v1', createFeedbackRouter(clients), createPostRouter(clients), userRouter, followsRouter, createLikeRouter(clients));
+app.use('/v1', createFeedbackRouter(clients), createPostRouter(clients), userRouter, createFollowRouter(clients), notifyRouter, createLikeRouter(clients));
 app.use('/auth', authRouter);
 app.get('/terms', (req: any, res: any) => {
   return res.json({
