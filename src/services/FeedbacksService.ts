@@ -4,12 +4,13 @@ import type { IPost } from "../entities/Post.ts";
 import type { IFeedback } from "../entities/Feedbacks.ts";
 import type { IFeedbackServices } from "../interfaces/services/IFeedbackServices.ts";
 import FeedbackRepository from "../repository/FeedbacksRepository.ts";
+import NotifyService from "../services/NotifyService.ts";
 import PostRepository from "../repository/PostRepository.ts";
 import mongoose from "mongoose";
 import Feedback from "../entities/Feedbacks.ts";
-import { notify } from "../utils/notify.ts";
 
 let repositoryFeedBack = FeedbackRepository;
+let serviceNotify = NotifyService
 let repositoryPost = PostRepository;
 
 class FeedbacksService implements IFeedbackServices {
@@ -20,20 +21,16 @@ class FeedbacksService implements IFeedbackServices {
     if (!postById)
       return res.status(401).json({ status: false, result: 'Invalid feedback data' });
     repositoryFeedBack.create(feedbacks)
-    
+
     //put comment in array post
     postById.comments?.push(feedbacks.id)
     repositoryPost.update(postById.id, postById)//save comment in post
-    
-    //notify
-    const paramsNotifyFeedback = ({
-      event: 'Feedback',
-      postId : postById?._id,
-      author: feedbacks?.author,
-      message: `Usuário ${feedbacks?.author} deu um feedback no post ${postById?._id}.`,
-    })
+
+
+    // notify user
     const userIdNotified = postById.owner?._id.toString()
-    notify(req.clients, paramsNotifyFeedback, userIdNotified)
+    serviceNotify.notifyUser(feedbacks.postId, 2, feedbacks?.author, userIdNotified, req.clients)
+    
     return feedbacks
   }
   public async getById(id: string): Promise<IFeedback | null | false> {

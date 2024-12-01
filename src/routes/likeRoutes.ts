@@ -6,9 +6,15 @@ import { rateLimiter } from '../middleware/RateLimit.ts';
 
 const likeRouter = Router();
 
-likeRouter.post('/publish-like/:postId', authMiddleware, LikeController.toggleLike);
-likeRouter.get('/likes-qtd/:postId', authMiddleware, LikeController.getQtdLike);
-likeRouter.get('/you-like-post/:postId/:userId', authMiddleware, LikeController.youLikedPost);
+export const createLikeRouter = (clients: WebSocket[]) => {
+    likeRouter.post('/publish-like/:postId', rateLimiter, authMiddleware, async (req: any, res) => {
+        req.clients = clients; // Adiciona manualmente os clientes ao objeto de request
+        await LikeController.toggleLike(req, res);
+    });
+    likeRouter.get('/likes-qtd/:postId', rateLimiter, authMiddleware, LikeController.getQtdLike);
+    likeRouter.get('/you-like-post/:postId/:userId', authMiddleware, LikeController.youLikedPost);
 
+    return likeRouter;
+};
 
-export { likeRouter };
+export default createLikeRouter;

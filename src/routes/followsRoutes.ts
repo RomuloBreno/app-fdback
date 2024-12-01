@@ -6,11 +6,21 @@ import { rateLimiter } from '../middleware/RateLimit.ts';
 
 const followsRouter = Router();
 
-followsRouter.post('/follow-user/:anotherUserId/', authMiddleware,  FollowController.addFollow);
-followsRouter.post('/unfollow-user/:anotherUserId', authMiddleware, FollowController.removeFollow);
-followsRouter.get('/follows-qtd/:userId', authMiddleware, FollowController.getQtdFollow);
-followsRouter.get('/you-follow-me/:anotherUserId/:userId', authMiddleware, FollowController.youFollowMe);
-followsRouter.get('/followers/user/:userId', authMiddleware, FollowController.getFollowersByUser);
-followsRouter.get('/following/user/:userId', authMiddleware, FollowController.getFollowingByUser);
+export const createFollowRouter = (clients: WebSocket[]) => {
+    followsRouter.post('/follow-user/:anotherUserId/', rateLimiter, authMiddleware, async (req: any, res) => {
+        req.clients = clients; // Adiciona manualmente os clientes ao objeto de request
+        await FollowController.addFollow(req, res);
+    });
+    followsRouter.post('/unfollow-user/:anotherUserId', rateLimiter, authMiddleware, async (req: any, res) => {
+        req.clients = clients; // Adiciona manualmente os clientes ao objeto de request
+        await FollowController.removeFollow(req, res);
+    });
+    followsRouter.get('/follows-qtd/:userId', authMiddleware, FollowController.getQtdFollow);
+    followsRouter.get('/you-follow-me/:anotherUserId/:userId', authMiddleware, FollowController.youFollowMe);
+    followsRouter.get('/followers/user/:userId', authMiddleware, FollowController.getFollowersByUser);
+    followsRouter.get('/following/user/:userId', authMiddleware, FollowController.getFollowingByUser);
+    return followsRouter;
+};
 
-export { followsRouter };
+
+export default createFollowRouter;

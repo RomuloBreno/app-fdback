@@ -1,4 +1,3 @@
-import type { ILikes } from "../entities/Likes.ts";
 import type { ILoggerService } from "../interfaces/logger/ILoggerService.ts";
 import type { ILikeService } from '../interfaces/services/ILikeServices.ts'
 import LikeService from '../services/LikeService.ts'

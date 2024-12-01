@@ -85,6 +85,11 @@ export class PostRepository extends BaseRepository<IPost> {
     const posts: IPost[] | null = await Post.aggregate([
       // Filtra os documentos pelo campo "owner"
       {
+        $addFields: {
+          creationDate: { $toDate: "$_id" } // Converte o _id para uma data
+        }
+      },
+      {
           $match: {
               owner: new mongoose.Types.ObjectId(userId), // Certifique-se de converter o userId se necessário
           },

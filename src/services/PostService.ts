@@ -19,13 +19,20 @@ class PostService implements IPostServices {
         let posts: IPost[] | null = []
         const getPostsByFollowing: IPost[] | null=  await repository.getPostsByFollowing(userId, limit);
         const getPostsByjob: IPost[] | null =  await repository.getPostsByJob(userId, limit);
-        getPostsByFollowing?.map((e)=>{
+        const getLastPostByUser: (IPost | null )[]=  await repository.getPostsByUser(userId, 1);
+        getPostsByjob?.map((e)=>{
             posts.push(e)
         })
-        // getPostsByjob?.map((e)=>{
-        //     if(!(posts.indexOf(e) === -1))
-        //         posts.push()
-        // })
+        getPostsByFollowing?.map((e)=>{
+            if(posts.indexOf(e) === -1)
+                posts.push(e)
+        })
+        getLastPostByUser?.map((e)=>{
+            if(e){
+                if(posts.indexOf(e) === -1)
+                    posts.push(e)
+            }
+        })
         return posts
     }
     public async getPostsByStoryPosts(postStory:string): Promise<(IPost | null)[]> {
@@ -39,7 +46,6 @@ class PostService implements IPostServices {
         
         return postsByPostStoryWithCreatedDate
     }
-    // Método para exibir informações do usuário
     public async InsertPost(req: any): Promise<IPost> {
         const {postStoryPattern} = req.body
         let PostStoryCreatedOrUpdated;
@@ -47,15 +53,16 @@ class PostService implements IPostServices {
         let postCreated =  await repository.create(post);
   
             // Verifica se o padrão `postStoryPattern` é válido
-            if (postStoryPattern) {
-                // Busca o PostStory existente pelo padrão
-                const existingPostStory = await PostStory.findOne({ _id: postStoryPattern }).exec();
-                
-                // Adiciona o ID do post criado ao PostStory encontrado
-                existingPostStory?.postStory?.push(postCreated?.id);
-                existingPostStory?.save();
-                PostStoryCreatedOrUpdated = existingPostStory
-            } else {
+            if (postStoryPattern !== undefined) {
+                if(postStoryPattern){
+                    // Busca o PostStory existente pelo padrão
+                    const existingPostStory = await PostStory.findOne({ _id: postStoryPattern }).exec();
+                    
+                    // Adiciona o ID do post criado ao PostStory encontrado
+                    existingPostStory?.postStory?.push(postCreated?.id);
+                    existingPostStory?.save();
+                    PostStoryCreatedOrUpdated = existingPostStory
+                } else {
                 // Inicializa um novo PostStory com os dados da requisição
                 let postStory = new PostStory(req.body);
                 // Adiciona o ID do post criado ao array `postStory`
@@ -63,6 +70,7 @@ class PostService implements IPostServices {
                 // Cria um novo PostStory caso o padrão não seja fornecido
                 PostStoryCreatedOrUpdated = await repositoryPostStory.create(postStory);
             }
+        }
         
             postCreated.postStoryPattern = PostStoryCreatedOrUpdated?.id;
         

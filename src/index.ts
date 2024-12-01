@@ -5,12 +5,15 @@ import type { WebSocket } from 'ws';
 import dotenv from 'dotenv'
 import { authRouter } from './routes/authRoutes.ts'
 import cors from 'cors';
-import createfeedbackRouter from './routes/feedbacksRoutes.ts';
-import { postRouter } from './routes/postRoutes.ts';
+
 import { userRouter } from './routes/userRoute.ts';
 import { followsRouter } from './routes/followsRoutes.ts';
-import { likeRouter } from './routes/likeRoutes.ts';
 import { verifyToken } from './utils/tokenUtil.ts';
+
+import createFeedbackRouter from './routes/feedbacksRoutes.ts';
+import createLikeRouter from './routes/likeRoutes.ts';
+import createPostRouter from './routes/postRoutes.ts';
+import createFollowRouter from './routes/followsRoutes.ts';
 
 dotenv.config()
 const app = express();
@@ -19,7 +22,7 @@ const corsOptions = {
   origin: process.env.FRONT_END
 };
 // Criar servidor WebSocket
-const wss = new WebSocketServer({ port: 6001 });
+const wss = new WebSocketServer({ port:process.env.PORT_WEB_SOCKET });
 
 // Manter lista de clientes conectados
 const clients: WebSocket[] = [];
@@ -61,7 +64,7 @@ wss.on('connection', (ws: WebSocket, req: any) => {
 app.use(cors(corsOptions));
 app.set('trust proxy', 1);
 app.use(express.json());
-app.use('/v1', createfeedbackRouter(clients), postRouter, userRouter, followsRouter, likeRouter);
+app.use('/v1', createFeedbackRouter(clients), createPostRouter(clients), userRouter, followsRouter, createLikeRouter(clients));
 app.use('/auth', authRouter);
 app.get('/terms', (req: any, res: any) => {
   return res.json({
