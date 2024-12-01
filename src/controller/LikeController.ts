@@ -13,7 +13,7 @@ class LikeController {
     const userLike = req.body.userId
     if ((!postId || !userLike) || (postId == undefined || userLike == undefined))
       return res.status(404).json({ status: false, result: 'Não foi possivel adicionar o Like' });
-    const liked = service.toggleLike(postId, userLike)
+    const liked = service.toggleLike(postId, userLike, req.clients)
     if (!liked)
       return res.status(404).json({ status: false, result: 'Não foi possivel adicionar o Like' });
     return res.status(200).json({ status: true, result: liked });

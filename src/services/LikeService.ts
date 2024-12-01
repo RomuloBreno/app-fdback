@@ -1,8 +1,15 @@
 import type { ILikeService } from "../interfaces/services/ILikeServices.ts";
 import type { ILikes } from "../entities/Likes.ts";
+import type { IPost } from "../entities/Post.ts";
+import Post from "../entities/Post.ts";
 import LikeRepository from "../repository/LikeRepository.ts";
 
+import NotifyService from "../services/NotifyService.ts";
+import mongoose from "mongoose";
+
 let repository = LikeRepository
+
+let serviceNotify = new NotifyService()
 class LikeService implements ILikeService {
   async youLikedPost(postId: string, userId: string): Promise<boolean | null> {
     if(!postId)
@@ -13,17 +20,25 @@ class LikeService implements ILikeService {
       return false
     return true 
   }
-  async toggleLike(postId: string, liker: string): Promise<boolean> {
+  async toggleLike(postId: string, liker: string, clients:WebSocket[]): Promise<boolean> {
     const likedRecord = await repository.getByPost(postId)
     if (!likedRecord) {
       const added = await repository.addLike(postId, liker)
+      const postRecord: IPost | null = await Post.findOne({_id: postId}).exec()
+      const notifierId = new mongoose.Types.ObjectId(liker);
+      if(postRecord)
+         serviceNotify.notifyUser(1, notifierId, postRecord?.owner, clients, postRecord?._id)
       return added || false
     }
-
+    
     const validUserLiked = likedRecord?.usersLiked?.includes(liker)
-      ? await repository.removeLike(postId, liker)
-      : await repository.addLike(postId, liker)
+    ? await repository.removeLike(postId, liker)
+    : await repository.addLike(postId, liker)
 
+      const postRecord: IPost | null = await Post.findOne({_id: postId}).exec()
+      const notifierId = new mongoose.Types.ObjectId(liker);
+      if(postRecord)
+         serviceNotify.notifyUser(1, notifierId, postRecord?.owner, clients)
     return validUserLiked || false
   }
   async getQtdLike(id: string): Promise<number | null> {

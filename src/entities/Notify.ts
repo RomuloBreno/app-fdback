@@ -13,7 +13,7 @@ export interface INotify extends Document {
 const NotifySchema: Schema = new Schema({
     receiver: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     notifier:  { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-    postId:  { type: mongoose.Schema.Types.ObjectId, ref: 'Post', required: true },
+    postId:  { type: mongoose.Schema.Types.ObjectId, ref: 'Post', required: false },
     message: {type: Number}
 });
 

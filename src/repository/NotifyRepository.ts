@@ -28,7 +28,7 @@ export class NotifyRepository extends BaseRepository<INotify> {
             },
             // Limita a quantidade de resultados
             {
-                $limit: limit || 30, // Defina o número máximo de documentos a serem retornados
+                $limit: limit || 10, // Defina o número máximo de documentos a serem retornados
             },
         ]).exec();
         

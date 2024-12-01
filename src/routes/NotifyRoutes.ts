@@ -6,7 +6,7 @@ import { rateLimiter } from '../middleware/RateLimit.ts';
 
 const notifyRouter = Router();
 
-notifyRouter.get('/notifications-qtd/:userId',rateLimiter, authMiddleware, NotifyController.getQtdNotify);
+notifyRouter.get('/notifications-qtd/:userId', authMiddleware, NotifyController.getQtdNotify);
 
 
 export { notifyRouter };
