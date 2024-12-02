@@ -28,7 +28,8 @@
     "google-auth-library": "^9.14.2",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.7.3",
-    "uuid": "^11.0.2"
+    "uuid": "^11.0.2",
+    "ws": "^8.18.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",
