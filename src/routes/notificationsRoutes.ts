@@ -4,9 +4,9 @@ import { authMiddleware } from '../middleware/AuthMiddleware.ts'
 import { rateLimiter } from '../middleware/RateLimit.ts';
 
 
-const notifyRouter = Router();
+const notificationsRouter = Router();
 
-notifyRouter.get('/notifications-qtd/:userId', authMiddleware, NotifyController.getQtdNotify);
+notificationsRouter.get('/notifications-qtd/:userId', authMiddleware, NotifyController.getQtdNotify);
 
 
-export { notifyRouter };
+export { notificationsRouter };

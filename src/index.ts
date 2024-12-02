@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import { setupWebSocket, clients } from './websocket.ts';
 import { authRouter } from './routes/authRoutes.ts';
-import { notifyRouter } from './routes/notifyRoutes.ts';
+import { notificationsRouter } from './routes/notificationsRoutes.ts';
 import { userRouter } from './routes/userRoutes.ts';
 import createFeedbackRouter from './routes/feedbacksRoutes.ts';
 import createLikeRouter from './routes/likeRoutes.ts';
@@ -34,7 +34,7 @@ app.use(
   createPostRouter(clients),
   createFollowRouter(clients),
   createLikeRouter(clients),
-  notifyRouter,
+  notificationsRouter,
   userRouter,
 );
 app.use('/auth', authRouter);
