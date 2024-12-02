@@ -19,8 +19,9 @@ export class NotifyRepository extends BaseRepository<INotify> {
             },
             {
                 $match: {
-                    receiver: new mongoose.Types.ObjectId(userId), // Certifique-se de converter o userId se necessário
-                },
+                    notifier: { $ne: new mongoose.Types.ObjectId(userId) }, // Negação do notifier
+                    receiver: new mongoose.Types.ObjectId(userId), // Receiver igual ao userId
+                  },
             },
             // Ordena os documentos por ordem de criação decrescente (_id implícito)
             {

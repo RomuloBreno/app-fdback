@@ -21,8 +21,10 @@ class NotifyService implements INotifyService {
     }
     let notify = new Notify(data);
     const notifyCreated = this.insertNotify(notify)
-    this.notify(clients, data, receiver.toString(), message)
-    console.log("create notify")
+    if(notifier?._id.toString() !== receiver?._id.toString()){
+      this.notify(clients, data, receiver.toString(), message)
+      console.log("create notify")
+    }
     return notifyCreated
   }
   public async  insertNotify(notify: INotify): Promise<INotify | null> {
