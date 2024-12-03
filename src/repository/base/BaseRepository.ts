@@ -1,13 +1,12 @@
 
 import mongoose, { Document, Model } from 'mongoose';
-import {connect} from '../../database/mongodb.ts';
 
 // repositories/BaseRepository.ts
 export class BaseRepository<T extends Document> {
     protected model: Model<T>;
 
     constructor(model: Model<T>) {
-        connect();
+        
         this.model = model;
     }
 

@@ -9,6 +9,7 @@ import createFeedbackRouter from './routes/feedbacksRoutes.ts';
 import createLikeRouter from './routes/likeRoutes.ts';
 import createPostRouter from './routes/postRoutes.ts';
 import createFollowRouter from './routes/followsRoutes.ts';
+import {connect} from './database/mongodb.ts';
 
 dotenv.config();
 const app = express();
@@ -18,7 +19,7 @@ const WEBSOCKET_PORT = process.env.PORT_WEB_SOCKET || 5002;
 const corsOptions = {
   origin: process.env.FRONT_END,
 };
-
+connect();
 // Configurar WebSocket em outro arquivo
 setupWebSocket(Number(WEBSOCKET_PORT));
 
