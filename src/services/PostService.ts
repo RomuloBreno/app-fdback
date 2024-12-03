@@ -47,7 +47,7 @@ class PostService implements IPostServices {
         return postsByPostStoryWithCreatedDate
     }
     public async InsertPost(req: any): Promise<IPost> {
-        const {postStoryPattern} = req.body
+        const postStoryPattern = req.body.postStoryPattern
         let PostStoryCreatedOrUpdated;
         let post = new Post(req.body);
         let postCreated =  await repository.create(post);

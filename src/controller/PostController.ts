@@ -20,7 +20,7 @@ class PostController {
       return res.status(201).json({status:true, result:{id: result.id, owner: result.owner} });
     } catch (error) {
       logger.Insert(Object.assign(new Logger(), {status: "Failed", statusCode: 404, content: error.message , method: "handle PostController"}));
-      return res.status(404).json({status:false, result:  'Invalid post data' });
+      return res.status(404).json({status:false, result:  'Invalid data, Post not created' });
     }
   }
 
