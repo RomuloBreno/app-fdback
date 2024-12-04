@@ -13,7 +13,8 @@ class FeedbackController{
       try {
         var result:IFeedback= await service.InsertFeedback(req, res);
         if(!result){
-          return res.status(404).json({status:false, result:  'Comment not created'});
+          logger.Insert(Object.assign(new Logger(), {status: "Failed", statusCode: 404, content: result , method: "handle FeedbackController"}));
+          return res.status(404).json({status:false, result:  'Feedback not created'});
         }
         return res.status(201).json({status:true, result: result});
     

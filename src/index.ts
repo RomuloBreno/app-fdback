@@ -86,6 +86,8 @@ app.use(limiter);
 // Configuração de CORS
 const corsOptions = {
   origin: process.env.FRONT_END,
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true // Permite envio de cookies
 };
 app.use(cors(corsOptions));
 

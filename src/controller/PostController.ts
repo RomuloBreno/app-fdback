@@ -15,6 +15,7 @@ class PostController {
     try {
       var result: IPost = await service.InsertPost(req);
       if (!result){
+        logger.Insert(Object.assign(new Logger(), {status: "Failed", statusCode: 404, content: result , method: "handle PostController"}));
         return res.status(404).json({status:false, result:  'Post not created' });
       }
       return res.status(201).json({status:true, result:{id: result.id, owner: result.owner} });
