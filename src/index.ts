@@ -90,6 +90,7 @@ const corsOptions = {
   credentials: true // Permite envio de cookies
 };
 app.use(cors(corsOptions));
+app.options('*', cors())
 
 app.set('trust proxy', 1);
 app.use(express.json());
