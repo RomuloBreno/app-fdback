@@ -87,7 +87,8 @@ app.use(limiter);
 app.use(cors({
   origin: process.env.FRONT_END,
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  credentials: true // Permite envio de cookies
+  credentials: true, // Permite envio de cookies
+  allowedHeaders: ['Content-Type', 'Authorization'], // Inclua todos os cabeçalhos necessários
 }));
 app.options('*', cors())
 
