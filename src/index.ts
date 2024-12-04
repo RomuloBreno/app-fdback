@@ -82,18 +82,38 @@ const WEBSOCKET_PORT = process.env.PORT_WEB_SOCKET || 5002;
   // });
   // app.use(limiter);
   
-  // Configuração de CORS
-  app.use(cors({
-    origin: process.env.FRONT_END,
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    credentials: true, // Permite envio de cookies
-    allowedHeaders: ['Content-Type', 'Authorization'], // Inclua todos os cabeçalhos necessários
-  }));
-  app.options('*', cors())
-  app.use(helmet());
+  
+// Configuração de CORS
+app.use(cors({
+  origin: process.env.FRONT_END, // Permite apenas a origem do seu front-end
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos HTTP permitidos
+  credentials: true, // Permite envio de cookies e credenciais
+  allowedHeaders: ['Content-Type', 'Authorization'], // Inclua os cabeçalhos necessários
+}));
 
-app.set('trust proxy', 1);
-app.use(express.json());
+// Configuração de Helmet com Content Security Policy (CSP) ajustado
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"], // Permite recursos do mesmo domínio
+      scriptSrc: ["'self'", process.env.FRONT_END as string], // Permite scripts do front-end
+      styleSrc: ["'self'", process.env.FRONT_END as string, "'unsafe-inline'"], // Permite estilos, incluindo inline se necessário
+      imgSrc: ["'self'", process.env.FRONT_END as string, 'data:'], // Permite imagens do domínio e embeds de dados
+      connectSrc: ["'self'", process.env.BACK_END as string], // Permite conexões API
+      frameSrc: ["'none'"], // Proíbe o carregamento de frames de outras origens
+      objectSrc: ["'none'"], // Proíbe o uso de objetos externos
+      upgradeInsecureRequests: [], // Se for necessário permitir HTTP para HTTPS em dev
+    },
+  },
+}));
+
+// Configurações adicionais
+app.set('trust proxy', 1); // Necessário para ambientes com proxy reverso
+app.use(express.json()); // Middleware para parse de JSON
+
+// Middleware para lidar com preflight requests (CORS para métodos complexos)
+app.options('*', cors());
+
 
 // Conexão ao banco de dados
 connect();
