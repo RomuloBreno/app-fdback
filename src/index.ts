@@ -74,23 +74,23 @@ const PORT = process.env.PORT || 5000;
 const WEBSOCKET_PORT = process.env.PORT_WEB_SOCKET || 5002;
 
 // Middleware de segurança
-app.use(helmet());
 
-// Limite de requisições por IP
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutos
-  max: 100, // Limite de 100 requisições por IP
-});
-app.use(limiter);
-
-// Configuração de CORS
-app.use(cors({
-  origin: process.env.FRONT_END,
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  credentials: true, // Permite envio de cookies
-  allowedHeaders: ['Content-Type', 'Authorization'], // Inclua todos os cabeçalhos necessários
-}));
-app.options('*', cors())
+// // Limite de requisições por IP
+// const limiter = rateLimit({
+  //   windowMs: 15 * 60 * 1000, // 15 minutos
+  //   max: 100, // Limite de 100 requisições por IP
+  // });
+  // app.use(limiter);
+  
+  // Configuração de CORS
+  app.use(cors({
+    origin: process.env.FRONT_END,
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true, // Permite envio de cookies
+    allowedHeaders: ['Content-Type', 'Authorization'], // Inclua todos os cabeçalhos necessários
+  }));
+  app.options('*', cors())
+  app.use(helmet());
 
 app.set('trust proxy', 1);
 app.use(express.json());
