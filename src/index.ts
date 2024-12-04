@@ -84,12 +84,11 @@ const limiter = rateLimit({
 app.use(limiter);
 
 // Configuração de CORS
-const corsOptions = {
+app.use(cors({
   origin: process.env.FRONT_END,
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true // Permite envio de cookies
-};
-app.use(cors(corsOptions));
+}));
 app.options('*', cors())
 
 app.set('trust proxy', 1);
