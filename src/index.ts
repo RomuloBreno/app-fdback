@@ -84,12 +84,16 @@ const WEBSOCKET_PORT = process.env.PORT_WEB_SOCKET || 5002;
   
   
 // Configuração de CORS
-app.use(cors({
-  origin: process.env.FRONT_END, // Permite apenas a origem do seu front-end
+
+const corsOptions = {
+origin: process.env.FRONT_END, // Permite apenas a origem do seu front-end
   methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos HTTP permitidos
   credentials: true, // Permite envio de cookies e credenciais
-  allowedHeaders: ['Content-Type', 'Authorization'], // Inclua os cabeçalhos necessários
-}));
+  allowedHeaders: ['Content-Type', 'Authorization'], // Inclua os cabeçalhos necessário
+};
+
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 
 // Configuração de Helmet com Content Security Policy (CSP) ajustado
 app.use(helmet({
@@ -112,7 +116,6 @@ app.set('trust proxy', 1); // Necessário para ambientes com proxy reverso
 app.use(express.json()); // Middleware para parse de JSON
 
 // Middleware para lidar com preflight requests (CORS para métodos complexos)
-app.options('*', cors());
 
 
 // Conexão ao banco de dados
