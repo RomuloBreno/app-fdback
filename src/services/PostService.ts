@@ -20,18 +20,23 @@ class PostService implements IPostServices {
         const getPostsByFollowing: IPost[] | null=  await repository.getPostsByFollowing(userId, limit);
         const getPostsByjob: IPost[] | null =  await repository.getPostsByJob(userId, limit);
         const getLastPostByUser: (IPost | null )[]=  await repository.getPostsByUser(userId, 1);
-        getPostsByjob?.map((e)=>{
-            posts.push(e)
-        })
-        getPostsByFollowing?.map((e)=>{
+        const getPostByAll: IPost[] | null =  await repository.getAll();
+        // getPostsByjob?.map((e)=>{
+        //     posts.push(e)
+        // })
+        // getPostsByFollowing?.map((e)=>{
+        //     if(posts.indexOf(e) === -1)
+        //         posts.push(e)
+        // })
+        // getLastPostByUser?.map((e)=>{
+        //     if(e){
+        //         if(posts.indexOf(e) === -1)
+        //             posts.push(e)
+        //     }
+        // })
+        getPostByAll?.map((e)=>{
             if(posts.indexOf(e) === -1)
                 posts.push(e)
-        })
-        getLastPostByUser?.map((e)=>{
-            if(e){
-                if(posts.indexOf(e) === -1)
-                    posts.push(e)
-            }
         })
         return posts
     }
