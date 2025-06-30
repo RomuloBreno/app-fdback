@@ -23,7 +23,7 @@ class AuthController {
     const user = await AuthService.validateRegister(result)
     if(!user){
       logger.Insert(Object.assign(new Logger(), {status: "Failed validate register", statusCode: 200, content: user , method: "Login AuthController"}));
-      return res.status(200).json({status:false, result:  'Não foi possivel registrar o usuário, pois o Email já etá cadastrado' });
+      return res.status(200).json({status:false, result:  'Não foi possivel registrar o usuário, pois o Email ou Nick já etá cadastrado' });
     }
     return res.status(200).json({status:true, result:user });
   }
