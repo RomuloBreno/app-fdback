@@ -12,10 +12,15 @@ dotenv.config()
 let repository = UserRepository
 const RECAPTCHA_SECRET_KEY = process.env.RECAPTCHA_SECRET_KEY;
 class AuthService {
-  async register(name: string, nick: string, email: string, job: string, password: string): Promise<IUser> {
-    const saltRounds = parseInt(process.env.BCRYPT_SALT_ROUNDS || '11');//failed web
-    const passwordHash = await bcrypt.hash(password, saltRounds);
+  async register(name: string, nick: string, email: string, job: string, password: string): Promise<IUser | null> {
+    const saltRoundsEnv = process.env.BCRYPT_SALT_ROUNDS;
+    // const saltRounds = Number.isInteger(+saltRoundsEnv!) ? parseInt(saltRoundsEnv!) : 11;
+    const salt = await bcrypt.genSalt(+saltRoundsEnv!)
+    const passwordHash = bcrypt.hashSync(password, salt);
     let user = new User({ name, nick, email, job, passwordHash });
+    const userExist = await repository.getByEmail(email)
+    if(userExist)
+      return null
     return await repository.create(user);
   }
 

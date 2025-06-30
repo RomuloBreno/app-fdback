@@ -14,6 +14,9 @@ export class UserRepository extends BaseRepository<IUser> {
     async getByNick(nick: string): Promise<IUser | null> {
         return await User.findOne({ nick: nick }).select('-passwordHash').exec();
     }
+    async getByEmail(email: string): Promise<IUser | null> {
+        return await User.findOne({ email: email }).select('-passwordHash').exec();
+    }
 }
 
 export default new UserRepository();
