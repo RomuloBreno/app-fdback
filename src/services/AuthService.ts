@@ -18,9 +18,6 @@ class AuthService {
     const salt = await bcrypt.genSalt(+saltRoundsEnv!)
     const passwordHash = bcrypt.hashSync(password, salt);
     let user = new User({ name, nick, email, job, passwordHash });
-    const userExist = await repository.getByEmail(email)
-    if(userExist)
-      return null
     return await repository.create(user);
   }
 
@@ -78,6 +75,11 @@ class AuthService {
     const email = decoded[2]
     const job = decoded[3]
     const password = decoded[4]
+
+    const userExistEmail = await repository.getByEmail(email)
+    const userExistNick = await repository.getByNick(nick)
+    if(userExistEmail && userExistNick)
+      return false
 
     const user = await this.register(name, nick, email, job, password);
     if (!user || !user?.email)
