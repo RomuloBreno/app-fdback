@@ -18,12 +18,12 @@ class AuthController {
     const { result } = req.body;
     if(!isBase64(result)){
       logger.Insert(Object.assign(new Logger(), {status: "Failed base 64", statusCode: 404, content: isBase64(result) , method: "Login AuthController"}));
-      return res.status(404).json({status:false, result:  'JSON Invalido' });
+      return res.status(404).json({status:false, result:  'Falha na comunicação entre cliente e servidor' });
     }
     const user = await AuthService.validateRegister(result)
     if(!user){
-      logger.Insert(Object.assign(new Logger(), {status: "Failed validate register", statusCode: 404, content: user , method: "Login AuthController"}));
-      return res.status(404).json({status:false, result:  'Não foi possivel registrar o usuário o Email já etá cadastrado' });
+      logger.Insert(Object.assign(new Logger(), {status: "Failed validate register", statusCode: 200, content: user , method: "Login AuthController"}));
+      return res.status(200).json({status:false, result:  'Não foi possivel registrar o usuário, pois o Email já etá cadastrado' });
     }
     return res.status(200).json({status:true, result:user });
   }
@@ -43,7 +43,7 @@ class AuthController {
     //   return res.status(400).json({ success: false, message: 'O reCAPTCHA é obrigatório.' });
     if(!isBase64(result)){
       logger.Insert(Object.assign(new Logger(), {status: "Failed base64", statusCode: 404, content: isBase64(result) , method: "Login AuthController"}));
-      return res.status(404).json({status:false, result:'JSON Invalido' });
+      return res.status(404).json({status:false, result:'Falha na comunicação entre cliente e servidor' });
     }
     const token = await AuthService.login(result)
     if(!token){
@@ -57,7 +57,7 @@ class AuthController {
     const token = req.headers.authorization?.split(' ')[1];
     const decoded = verifyToken(token);
     if (!decoded) {
-      return res.status(200).json({status:false, result:  'Erro no jwt' });
+      return res.status(200).json({status:false, result:  'Falha na comunicação entre cliente e servidor' });
     }
     req.userId = decoded.userId;
     return res.status(200).json({status:true, result:decoded});
