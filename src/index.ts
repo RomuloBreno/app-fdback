@@ -78,7 +78,7 @@ const WEBSOCKET_PORT = process.env.PORT_WEB_SOCKET || 5002;
 // // Limite de requisições por IP
 // const limiter = rateLimit({
   //   windowMs: 15 * 60 * 1000, // 15 minutos
-  //   max: 100, // Limite de 100 requisições por IP
+  //   max: 600, // Limite de 600 requisições por IP
   // });
   // app.use(limiter);
   
