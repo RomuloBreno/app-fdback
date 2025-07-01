@@ -19,14 +19,13 @@ export function setupWebSocket(port: number) {
       return;
     }
 
-    
     (ws as any).userId = userId; // Salva o ID do usuário no WebSocket
     clients.push(ws);
-    console.log("New client connected" + " " +`Total connected: ${clients.length}`);
+    console.log(`Total connected: ${clients.length}`);
 
-    clients.forEach((client) => {
-      console.log((client as any).userId);
-    });
+    // clients.forEach((client) => {
+    //   console.log((client as any).userId);
+    // });
 
     ws.on('message', (message: any) => {
       console.log(`Mensagem recebida: ${message}`);
