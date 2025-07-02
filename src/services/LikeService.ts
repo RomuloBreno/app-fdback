@@ -22,13 +22,14 @@ class LikeService implements ILikeService {
   }
   async toggleLike(postId: string, liker: string, clients:WebSocket[]): Promise<boolean> {
     const likedRecord = await repository.getByPost(postId)
+    const postRecord: IPost | null = await Post.findOne({_id: postId}).exec()
+    const postConvertId = new mongoose.Types.ObjectId(String(postId))
+    const postOwner = new mongoose.Types.ObjectId(String(postRecord?.owner))
     if (!likedRecord) {
       const added = await repository.addLike(postId, liker)
-      const postRecord: IPost | null = await Post.findOne({_id: postId}).exec()
-      const notifierId = new mongoose.Types.ObjectId(liker);
+      const notifierId= new mongoose.Types.ObjectId(liker);
       if(postRecord)
-         serviceNotify.notifyUser(1, notifierId, postRecord?.owner, clients, postRecord?._id)
-      console.log("Create and toggle Like")
+         serviceNotify.notifyUser(1, notifierId, postOwner, clients, postConvertId)
       return added || false
     }
     
@@ -36,11 +37,9 @@ class LikeService implements ILikeService {
     ? await repository.removeLike(postId, liker)
     : await repository.addLike(postId, liker)
 
-      const postRecord: IPost | null = await Post.findOne({_id: postId}).exec()
       const notifierId = new mongoose.Types.ObjectId(liker);
       if(postRecord && !likedRecord?.usersLiked?.includes(liker))
-         serviceNotify.notifyUser(1, notifierId, postRecord?.owner, clients)
-    console.log("toggle Like")
+         serviceNotify.notifyUser(1, notifierId, postOwner, clients, postConvertId)
     return validUserLiked || false
   }
   async getQtdLike(id: string): Promise<number | null> {
