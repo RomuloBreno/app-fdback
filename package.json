@@ -15,8 +15,8 @@
   },
   "type": "module",
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.703.0",
-    "@aws-sdk/s3-request-presigner": "^3.688.0",
+    "@aws-sdk/client-s3": "^3.842.0",
+    "@aws-sdk/s3-request-presigner": "^3.842.0",
     "@google-cloud/recaptcha-enterprise": "^5.13.0",
     "aws-sdk": "^2.1692.0",
     "bcrypt": "^6.0.0",
