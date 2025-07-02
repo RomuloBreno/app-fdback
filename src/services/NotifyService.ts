@@ -4,26 +4,25 @@ import type { INotifyService } from '../interfaces/services/INotifyService.ts';
 import type { INotify } from '../entities/Notify.ts';
 import {ENotify} from '../enums/ENotify.ts';
 import Notify from '../entities/Notify.ts';
-import { ObjectId } from 'mongoose';
+import { Types } from 'mongoose';
 
 dotenv.config()
 
 let repository = NotifyRepository
 
 class NotifyService implements INotifyService {
-  public async notifyUser(typeNotify: number, notifier:ObjectId, receiver:ObjectId, clients:WebSocket[], postId?:ObjectId): Promise<INotify | null> {
+  public async notifyUser(typeNotify: number, notifier:Types.ObjectId, receiver:Types.ObjectId, clients:WebSocket[], postId?:Types.ObjectId): Promise<INotify | null> {
     const message = ENotify[typeNotify]
     const data = {
       notifier,
       receiver,
       message:typeNotify,
-      postId: postId ? postId : null
+      postId: postId
     }
     let notify = new Notify(data);
     const notifyCreated = this.insertNotify(notify)
-    if(notifier?._id.toString() !== receiver?._id.toString()){
+    if(notifier?._id.toString() == receiver?._id.toString()){
       this.notify(clients, data, receiver.toString(), message)
-      console.log("create notify")
     }
     return notifyCreated
   }
@@ -39,9 +38,8 @@ private async notify(clientsReq:any, dataNotify:any, userId:string, messageStrin
   if (userId && clients.length > 0){
     clients.forEach((client) => {
       if (client.readyState === WebSocket.OPEN ) {
-        if (client.userId === userId ){
+        if ((client as any).userId === userId ){
           dataNotify.message = messageString
-          console.log('notify: ' + dataNotify?.message)
         client.send(
         JSON.stringify(dataNotify)
       );

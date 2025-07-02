@@ -14,10 +14,12 @@ class LikeController {
     const userLike = req.body.userId
     if ((!postId || !userLike) || (postId == undefined || userLike == undefined))
       return res.status(404).json({ status: false, result: 'Não foi possivel adicionar o Like' });
-    const liked = service.toggleLike(postId, userLike, req.clients)
-    if (!liked)
+    const liked = await service.toggleLike(postId, userLike, req.clients)
+    if (!liked){
+      logger.Insert(Object.assign(new Logger(), {status: "Failed", statusCode: 404, content: String(liked) || "" , method: "handle LikedController"}));
       return res.status(404).json({ status: false, result: 'Não foi possivel adicionar o Like' });
-    logger.Insert(Object.assign(new Logger(), {status: "Failed", statusCode: 404, content: liked , method: "handle LikedController"}));
+    }
+    logger.Insert(Object.assign(new Logger(), {status: "Success", statusCode: 200, content: String(liked) || "" , method: "handle LikedController"}));
     return res.status(200).json({ status: true, result: liked });
   }
 
