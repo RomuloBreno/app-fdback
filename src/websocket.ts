@@ -4,6 +4,8 @@ import { verifyToken } from './utils/tokenUtil.ts';
 
 export const clients: AuthenticationWebSocket[] = [];
 
+export let wsOn: boolean = false;
+
 export interface AuthenticationWebSocket extends WebSocket {
   userId?: string | null; // ou Types.ObjectId, dependendo do seu caso
 }
@@ -19,11 +21,13 @@ export function setupWebSocket(port: number) {
 
     if (!token || !verifyToken(token)) {
       ws.close();
+      wsOn = false;
       return;
     }
 
     AuthWs.userId = userId; // Salva o ID do usuário no WebSocket
     clients.push(ws);
+    wsOn = true;
     console.log(`Total connected: ${clients.length}`);
 
     // clients.forEach((client) => {
@@ -31,7 +35,6 @@ export function setupWebSocket(port: number) {
     // });
 
     ws.on('message', (message: any) => {
-      console.log(`Mensagem recebida: ${message}`);
     });
 
     ws.on('close', () => {

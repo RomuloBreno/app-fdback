@@ -44,7 +44,7 @@ class PostService implements IPostServices {
         let postsArr: (IPost | null)[] = await repository.getPostsByPostStory(postStory);
         let postsByPostStoryWithCreatedDate: (IPost | null)[] = await Promise.all(
             postsArr.map((post)=>{
-                const creationDate = new Date(post?._id?.getTimestamp());
+                const creationDate = new Date((post?._id as mongoose.Types.ObjectId)?.getTimestamp());
                 return { ...post?.toObject(), creationDate };
                 }) || []
             )
@@ -88,7 +88,7 @@ class PostService implements IPostServices {
         if (!mongoose.Types.ObjectId.isValid(id))
             return false
         let result = await repository.getById(id)
-        const creationDate = new Date(result?._id?.getTimestamp());
+        const creationDate = new Date((result?._id as mongoose.Types.ObjectId)?.getTimestamp());
         return { ...result?.toObject(), creationDate };
     }
     public async getPostsByUser(id: string, limit?:number) : Promise<(IPost | null)[] | false>{
@@ -97,7 +97,7 @@ class PostService implements IPostServices {
         let postsArr: (IPost | null)[] = await repository.getPostsByUser(id, limit)
         let postsByUserId: any = await Promise.all(
             postsArr.map((post)=>{
-                const creationDate = new Date(post?._id?.getTimestamp());
+                const creationDate = new Date((post?._id as mongoose.Types.ObjectId)?.getTimestamp());
                 return { ...post, creationDate };
                 }) || []
             )
