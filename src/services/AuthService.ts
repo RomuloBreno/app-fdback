@@ -25,9 +25,8 @@ class AuthService {
   async validateUser(email: string, password: string): Promise<any> {
     const user = await User.findOne({ email }); //passar função apra repositorio
     if (!user) return false;
-    const teste = await bcrypt.compare(password, user.passwordHash)
-    console.log(teste)
-    return { user: user.id, valid:teste }
+    const validcryptCompare = await bcrypt.compare(password, user.passwordHash)
+    return { user: user.id, valid:validcryptCompare}
   }
 
   // metodo cria url assinada para publicação no storage
@@ -79,7 +78,9 @@ class AuthService {
 
     const userExistEmail = await repository.getByEmail(email)
     const userExistNick = await repository.getByNick(nick)
-    if(userExistEmail && userExistNick)
+    if(userExistEmail)
+      return false
+    if(userExistNick)
       return false
 
     const user = await this.register(name, nick, email, job, password);
