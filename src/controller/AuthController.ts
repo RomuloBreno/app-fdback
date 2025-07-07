@@ -48,7 +48,7 @@ class AuthController {
     const token = await AuthService.login(result)
     if(!token){
       logger.Insert(Object.assign(new Logger(), {status: "Failed token", statusCode: 404, content: token , method: "Login AuthController"}));
-      return res.status(404).json({status:false, result:  'Não foi possivel autenticar o usuário' });
+      return res.status(200).json({status:false, result:  'Não foi possivel autenticar o usuário, login ou senha podem estar incorretos' });
     }
     return res.status(200).json({status:true, result:token });
   }
