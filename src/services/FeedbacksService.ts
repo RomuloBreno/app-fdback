@@ -27,7 +27,7 @@ class FeedbacksService implements IFeedbackServices {
     
     
     // notify user
-    const userIdNotified = postById.owner?._id.toString()
+    const userIdNotified = postById.owner
     serviceNotify.notifyUser(2, feedbacks?.author, userIdNotified, req.clients, feedbacks.postId)
     
     console.log("create feedback")
