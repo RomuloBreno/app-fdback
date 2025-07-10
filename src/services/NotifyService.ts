@@ -4,14 +4,14 @@ import type { INotifyService } from '../interfaces/services/INotifyService.ts';
 import type { INotify } from '../entities/Notify.ts';
 import { ENotify } from '../enums/ENotify.ts';
 import Notify from '../entities/Notify.ts';
-import { Types } from 'mongoose';
+import mongoose, { Types } from 'mongoose';
 
 dotenv.config()
 
 let repository = NotifyRepository
 
 class NotifyService implements INotifyService {
-  public async notifyUser(typeNotify: number, notifier: Types.ObjectId, receiver: Types.ObjectId, clients: WebSocket[], postId?: Types.ObjectId): Promise<INotify | null> {
+  public async notifyUser(typeNotify: number, notifier: mongoose.Schema.Types.ObjectId, receiver: mongoose.Schema.Types.ObjectId, clients: WebSocket[], postId?: mongoose.Schema.Types.ObjectId): Promise<INotify | null> {
     const message = ENotify[typeNotify]
     const data = {
       notifier,
@@ -23,9 +23,9 @@ class NotifyService implements INotifyService {
     const notifyCreated = this.insertNotify(notify)
 
     if (
-      notifier?._id &&
-      receiver?._id &&
-      notifier._id.toString() !== receiver._id.toString()
+      notifier &&
+      receiver &&
+      notifier.toString() !== receiver.toString()
     ) {
       this.notify(clients, data, receiver.toString(), message)
     }
