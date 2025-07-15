@@ -2,11 +2,12 @@ import { Router } from 'express';
 import LikeController from '../controller/LikeController.ts';
 import { authMiddleware } from '../middleware/AuthMiddleware.ts'
 import { rateLimiter } from '../middleware/RateLimit.ts';
+import type { AuthenticationWebSocket } from '../websocket.ts';
 
 
 const likeRouter = Router();
 
-export const createLikeRouter = (clients: WebSocket[]) => {
+export const createLikeRouter = (clients: AuthenticationWebSocket[]) => {
     likeRouter.post('/publish-like/:postId', rateLimiter, authMiddleware, async (req: any, res) => {
         req.clients = clients; // Adiciona manualmente os clientes ao objeto de request
         await LikeController.toggleLike(req, res);

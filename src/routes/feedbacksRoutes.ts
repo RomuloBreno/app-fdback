@@ -1,12 +1,13 @@
 import { Router } from 'express';
 import FeedbackController from "../controller/FeedbackController.ts";
 import { authMiddleware } from '../middleware/AuthMiddleware.ts';
+import type { AuthenticationWebSocket } from '../websocket.ts';
 
 const feedbackRouter = Router();
 const feedbackController = new FeedbackController();
 
 // Função para criar o roteador com os WebSocket clients
-export const createFeedbackRouter = (clients: WebSocket[]) => {
+export const createFeedbackRouter = (clients: AuthenticationWebSocket[]) => {
   
   feedbackRouter.post('/publish-feedback/:postId',authMiddleware, async (req:any, res) => {
       req.clients = clients; // Adiciona manualmente os clientes ao objeto de request
