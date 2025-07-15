@@ -2,11 +2,12 @@ import { Router } from 'express';
 import FollowController from '../controller/FollowController.ts';
 import { authMiddleware } from '../middleware/AuthMiddleware.ts'
 import { rateLimiter } from '../middleware/RateLimit.ts';
+import type { AuthenticationWebSocket } from '../websocket.ts';
 
 
 const followsRouter = Router();
 
-export const createFollowRouter = (clients: WebSocket[]) => {
+export const createFollowRouter = (clients: AuthenticationWebSocket[]) => {
     followsRouter.post('/follow-user/:anotherUserId/', rateLimiter, authMiddleware, async (req: any, res) => {
         req.clients = clients; // Adiciona manualmente os clientes ao objeto de request
         await FollowController.addFollow(req, res);
